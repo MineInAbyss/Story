@@ -1,0 +1,6 @@
+name: Metay
+version: @version@
+main: io.github.paul1365972.metay.Metay
+api-version: 1.15
+authors: [Paul1365972]
+description: Basic API for attaching custom data to Blocks, Chunks, Worlds, Items, Players and Entities
