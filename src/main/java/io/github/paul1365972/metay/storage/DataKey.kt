@@ -3,22 +3,23 @@ package io.github.paul1365972.metay.storage
 import kotlinx.io.ByteArrayOutputStream
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 class DataKey<T>(
+        //TODO Non null this, testing only
         val plugin: JavaPlugin?,
         val name: String,
         val serializer: (T) -> ByteArray,
         val deserializer: (ByteArray) -> T
 ) {
 
-    val namespacedKey: String
-        get() {
-            return "${plugin?.name}:$name"
-        }
+    val namespacedKey: NamespacedKey = NamespacedKey(plugin!!, name)
+
+    val namespacedName: String = "${plugin?.name}:$name"
 
     constructor(plugin: JavaPlugin,
                 name: String,
@@ -54,4 +55,15 @@ class DataKey<T>(
             }
     )
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as DataKey<*>
+        if (namespacedName != other.namespacedName) return false
+        return true
+    }
+
+    override fun hashCode(): Int = namespacedName.hashCode()
+
+    override fun toString(): String = namespacedName
 }

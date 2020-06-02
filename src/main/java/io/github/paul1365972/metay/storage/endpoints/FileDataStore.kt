@@ -1,20 +1,21 @@
-package io.github.paul1365972.metay.database
+package io.github.paul1365972.metay.storage.endpoints
 
 import java.io.*
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FileDatabase(
+class FileDataStore(
         val file: File
-) : MemoryDatabase() {
+) : MemoryDataStore<String>() {
 
     init {
         DataInputStream(ZipInputStream(FileInputStream(file))).use { dis ->
             val entries = dis.readInt()
             repeat(entries) {
-                val key = dis.readUTF()
+                val namespacedkey = dis.readUTF()
+                val locationkey = dis.readUTF()
                 val size = dis.readInt()
-                map[key] = ByteArray(size).apply { dis.readFully(this) }
+                map[namespacedkey to locationkey] = ByteArray(size).apply { dis.readFully(this) }
             }
         }
     }
@@ -23,7 +24,8 @@ class FileDatabase(
         DataOutputStream(ZipOutputStream(FileOutputStream(file))).use { dos ->
             dos.writeInt(map.size)
             map.forEach {
-                dos.writeUTF(it.key)
+                dos.writeUTF(it.key.first)
+                dos.writeUTF(it.key.second)
                 dos.writeInt(it.value.size)
                 dos.write(it.value)
             }

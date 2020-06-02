@@ -6,37 +6,40 @@ class CacheDataStore<L>(
         underlying: MetayDataStore<L>,
         val cacheSize: Int
 ) : FilterDataStore<L>(underlying) {
-    private val loaded = SizedHashMap<String, Entry<Any?, L>>(cacheSize) { _, v -> save(v)}
 
+    private val loaded = SizedHashMap<Pair<DataKey<Any?>, L>, Any?>(cacheSize) { k, v -> save(k.first, k.second, v) }
+
+    @Suppress("UNCHECKED_CAST")
     override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {
-        val dbKey = toKey(dataKey, locationKey)
-        loaded[dbKey]?.run {
-            @Suppress("UNCHECKED_CAST")
-            return this.value as T
+        val key = (dataKey to locationKey) as Pair<DataKey<Any?>, L>
+        loaded[key]?.run {
+            return this as T
         }
         return underlying.get(dataKey, locationKey)?.also {
-            put(dataKey, locationKey, it)
+            loaded[key] = it
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T) {
-        val dbKey = toKey(dataKey, locationKey)
-        @Suppress("UNCHECKED_CAST")
-        loaded[dbKey] = Entry(dataKey, locationKey, value) as Entry<Any?, L>
+        val key = (dataKey to locationKey) as Pair<DataKey<Any?>, L>
+        loaded[key] = value
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> remove(dataKey: DataKey<T>, locationKey: L) {
+        val key = (dataKey to locationKey) as Pair<DataKey<Any?>, L>
+        loaded.remove(key)
+        underlying.remove(dataKey, locationKey)
     }
 
     override fun onClose() {
-        loaded.values.forEach(this::save)
+        loaded.forEach { (k, v) -> save(k.first, k.second, v) }
         super.onClose()
     }
 
-    private fun save(entry: Entry<Any?, L>) {
-        underlying.put(entry.dataKey, entry.locationKey, entry.value)
+    private fun <T> save(dataKey: DataKey<T>, locationKey: L, value: T) {
+        underlying.put(dataKey, locationKey, value)
     }
 
-    class Entry<T, L>(
-            val dataKey: DataKey<T>,
-            val locationKey: L,
-            val value: T
-    )
 }
