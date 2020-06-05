@@ -19,7 +19,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         id: build
-        run: ./gradlew jar
+        run: ./gradlew jar shadowJar
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:

@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group pluginGroup
@@ -25,14 +26,6 @@ compileTestKotlin {
 repositories {
     mavenCentral()
     jcenter()
-    /*maven {
-        name 'sonatype'
-        url 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
-        name 'spigotmc-repo'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }*/
     maven {
         name 'papermc'
         url 'https://papermc.io/repo/repository/maven-public/'
