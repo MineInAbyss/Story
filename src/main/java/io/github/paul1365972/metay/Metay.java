@@ -2,6 +2,7 @@ package io.github.paul1365972.metay;
 
 import io.github.paul1365972.metay.listener.BlockListener;
 import io.github.paul1365972.metay.listener.LoadingListener;
+import io.github.paul1365972.metay.storage.CacheDataStore;
 import io.github.paul1365972.metay.storage.MetayDataStore;
 import io.github.paul1365972.metay.storage.TransformingDataStore;
 import io.github.paul1365972.metay.storage.endpoints.FileChunkedDataStore;
@@ -31,15 +32,33 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	
 	@Override
 	public void onLoad() {
-		//TODO Add CacheDataStore to pipeline
-		//TODO Estimate good cache sizes
-		blockStore = new FileChunkedDataStore<>(new File(getDataFolder(), "block"), 1024,
-				MCDataStoreUtil::toChunkKey, MCDataStoreUtil::toBlockKey);
-		chunkStore = new FileChunkedDataStore<>(new File(getDataFolder(), "chunk"), 1024,
-				MCDataStoreUtil::toSuperChunkKey, MCDataStoreUtil::toChunkKey);
-		worldStore = new FolderDataStore<>(new File(getDataFolder(), "world"), world -> world.getUID().toString());
-		entityStore = new TransformingDataStore<>(new PDCDataStore(), entity -> entity);
-		itemStore = new TransformingDataStore<>(new PDCDataStore(), ItemStack::getItemMeta);
+		// TODO Estimate good cache sizes
+		
+		// Chunk cache size of 1024 seems reasonable if we expect each player to interact with 5 chunks at a time
+		// Cache size just guesstimated, as i am still not sure how this will be used
+		blockStore = new CacheDataStore<>(
+				new FileChunkedDataStore<>(new File(getDataFolder(), "block"), 256,
+						MCDataStoreUtil::toChunkKey, MCDataStoreUtil::toBlockKey),
+				1024, MCDataStoreUtil::toBlockKey);
+		// We load max 512 super chunks at a time, just guessing
+		// 10x10 view distance at 50 plays leads to 5000 chunks, so we cache about double that amount
+		chunkStore = new CacheDataStore<>(
+				new FileChunkedDataStore<>(new File(getDataFolder(), "chunk"), 512,
+						MCDataStoreUtil::toSuperChunkKey, MCDataStoreUtil::toChunkKey),
+				8192, MCDataStoreUtil::toChunkKey);
+		// We wont have more than 128 worlds
+		worldStore = new CacheDataStore<>(
+				new FolderDataStore<>(new File(getDataFolder(), "world"), world -> world.getUID().toString()),
+				128, World::getUID);
+		// Do we need to make the entity object the key ("identity" keys) or the uuid?
+		// Cache size just guesstimated, 50 players with ~100 mobs each expected
+		entityStore = new CacheDataStore<>(
+				new TransformingDataStore<>(new PDCDataStore(), entity -> entity),
+				8124, Entity::getUniqueId);
+		// 4096 should be enough when we expect ~50 players with their inventories
+		itemStore = new CacheDataStore<>(
+				new TransformingDataStore<>(new PDCDataStore(), ItemStack::getItemMeta),
+				4096);
 	}
 	
 	@Override

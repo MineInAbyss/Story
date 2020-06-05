@@ -34,7 +34,7 @@ public class JavaTest {
 		});
 	}
 	
-	class MagicData {
+	static class MagicData {
 		public int a;
 		public String b;
 		
