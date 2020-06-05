@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
     id 'com.github.johnrengelman.shadow' version '5.2.0'
@@ -10,6 +11,8 @@ version pluginVersion
 
 java {
     sourceCompatibility JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
 }
 
 compileKotlin {
@@ -23,9 +26,22 @@ compileTestKotlin {
     }
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact shadowJar
+
+            afterEvaluate {
+                artifactId project.name.toLowerCase()
+            }
+        }
+    }
+}
+
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
     maven {
         name 'papermc'
         url 'https://papermc.io/repo/repository/maven-public/'
