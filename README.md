@@ -20,7 +20,7 @@ val magicKey = DataKey(plugin, "magic", MagicData.serializer(), Json(JsonConfigu
 
 Next acquire a metay service instance via the JavaPlugin 
 ```kotlin
-val service: MetayService = getServer().getServicesManager().load(MetayService.class);
+val service: MetayService = server.servicesManager.load(MetayService.class);
 ```
 
 Now with an entity and the data key you can attach, get, modify and update the data
