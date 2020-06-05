@@ -3,34 +3,43 @@ package io.github.paul1365972.metay;
 import io.github.paul1365972.metay.listener.BlockListener;
 import io.github.paul1365972.metay.listener.LoadingListener;
 import io.github.paul1365972.metay.storage.MetayDataStore;
-import io.github.paul1365972.metay.storage.endpoints.MemoryDataStore;
+import io.github.paul1365972.metay.storage.TransformingDataStore;
+import io.github.paul1365972.metay.storage.endpoints.FileChunkedDataStore;
+import io.github.paul1365972.metay.storage.endpoints.FolderDataStore;
 import io.github.paul1365972.metay.storage.endpoints.PDCDataStore;
-import io.github.paul1365972.metay.storage.impl.*;
+import io.github.paul1365972.metay.util.MCDataStoreUtil;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.Arrays;
 
 public final class Metay extends JavaPlugin implements MetayService, Listener {
 	
-	private LocationDataStore blockStore = null;
-	private ChunkDataStore chunkStore = null;
-	private UUIDDataStore worldStore = null;
-	private EntityDataStore entityStore = null;
-	private ItemDataStore itemStore = null;
+	private MetayDataStore<Location> blockStore = null;
+	private MetayDataStore<Chunk> chunkStore = null;
+	private MetayDataStore<World> worldStore = null;
+	private MetayDataStore<Entity> entityStore = null;
+	private MetayDataStore<ItemStack> itemStore = null;
 	
 	@Override
 	public void onLoad() {
-		blockStore = new LocationDataStore(new MemoryDataStore<>());
-		chunkStore = new ChunkDataStore(new MemoryDataStore<>());
-		worldStore = new UUIDDataStore(new MemoryDataStore<>());
-		entityStore = new EntityDataStore(new PDCDataStore());
-		itemStore = new ItemDataStore(new PDCDataStore());
+		//TODO Add CacheDataStore to pipeline
+		//TODO Estimate good cache sizes
+		blockStore = new FileChunkedDataStore<>(new File(getDataFolder(), "block"), 1024,
+				MCDataStoreUtil::toChunkKey, MCDataStoreUtil::toBlockKey);
+		chunkStore = new FileChunkedDataStore<>(new File(getDataFolder(), "chunk"), 1024,
+				MCDataStoreUtil::toSuperChunkKey, MCDataStoreUtil::toChunkKey);
+		worldStore = new FolderDataStore<>(new File(getDataFolder(), "world"), world -> world.getUID().toString());
+		entityStore = new TransformingDataStore<>(new PDCDataStore(), entity -> entity);
+		itemStore = new TransformingDataStore<>(new PDCDataStore(), ItemStack::getItemMeta);
 	}
 	
 	@Override
@@ -42,32 +51,27 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	
 	@Override
 	public void onDisable() {
-		Arrays.asList(blockStore, chunkStore, worldStore, entityStore)
+		Arrays.asList(blockStore, chunkStore, worldStore, entityStore, itemStore)
 				.forEach(MetayDataStore::onClose);
 	}
 	
-	@Override
-	public LocationDataStore getBlockStore() {
+	public MetayDataStore<Location> getBlockStore() {
 		return blockStore;
 	}
 	
-	@Override
-	public ChunkDataStore getChunkStore() {
+	public MetayDataStore<Chunk> getChunkStore() {
 		return chunkStore;
 	}
 	
-	@Override
-	public UUIDDataStore getWorldStore() {
+	public MetayDataStore<World> getWorldStore() {
 		return worldStore;
 	}
 	
-	@Override
-	public EntityDataStore getEntityStore() {
+	public MetayDataStore<Entity> getEntityStore() {
 		return entityStore;
 	}
 	
-	@Override
-	public ItemDataStore getItemStore() {
+	public MetayDataStore<ItemStack> getItemStore() {
 		return itemStore;
 	}
 	

@@ -1,17 +1,21 @@
 package io.github.paul1365972.metay;
 
-import io.github.paul1365972.metay.storage.impl.*;
+import io.github.paul1365972.metay.storage.MetayDataStore;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 
 public interface MetayService {
+	MetayDataStore<Location> getBlockStore();
 	
-	LocationDataStore getBlockStore();
+	MetayDataStore<Chunk> getChunkStore();
 	
-	ChunkDataStore getChunkStore();
+	MetayDataStore<World> getWorldStore();
 	
-	UUIDDataStore getWorldStore();
+	MetayDataStore<Entity> getEntityStore();
 	
-	EntityDataStore getEntityStore();
-	
-	ItemDataStore getItemStore();
+	MetayDataStore<ItemStack> getItemStore();
 	
 }

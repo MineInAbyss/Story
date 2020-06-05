@@ -5,24 +5,13 @@ interface MetayDataStore<L> {
     fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T)
     fun <T> remove(dataKey: DataKey<T>, locationKey: L)
 
-    //TODO choose and rename
-
-    fun <T> modify1(dataKey: DataKey<T>, locationKey: L, block: (T?) -> T?) {
+    fun <T> update(dataKey: DataKey<T>, locationKey: L, block: (T?) -> T?) {
         val modified = block(get(dataKey, locationKey))
         if (modified != null) put(dataKey, locationKey, modified) else remove(dataKey, locationKey)
     }
 
-    fun <T> modify2(dataKey: DataKey<T>, locationKey: L, block: DataModifier<T?>.() -> Unit) {
-        val modified = DataModifier(get(dataKey, locationKey))
-        block(modified)
-        if (modified.hasChanged()) {
-            val value = modified.get()
-            if (value != null) put(dataKey, locationKey, value) else remove(dataKey, locationKey)
-        }
-    }
-
-    fun <T> modify3(dataKey: DataKey<T>, locationKey: L, block: DataModifier<T?>.(T?) -> Unit) {
-        val modified = DataModifier(get(dataKey, locationKey))
+    fun <T> compute(dataKey: DataKey<T>, locationKey: L, block: DataSetter<T?>.(T?) -> Unit) {
+        val modified = DataSetter(get(dataKey, locationKey))
         block(modified, modified.get())
         if (modified.hasChanged()) {
             val value = modified.get()

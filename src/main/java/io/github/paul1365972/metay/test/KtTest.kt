@@ -21,21 +21,16 @@ fun test() {
 
     val magicKey = DataKey(null, "magic", MagicData.serializer(), Json(JsonConfiguration.Stable))
 
-    blockStore.modify1(magicKey, loc) {
+    blockStore.update(magicKey, loc) {
         (it ?: MagicData(0, "lorem")).apply {
             a += 3
         }
     }
 
-    blockStore.modify2(magicKey, loc) {
-        set((get() ?: MagicData(0, "lorem")).apply {
-            a += 3
-        } )
-    }
-
-    blockStore.modify3(magicKey, loc) {
+    blockStore.compute(magicKey, loc) {
         set((it ?: MagicData(0, "lorem")).apply {
-            a += 3 }
+            a += 3
+        }
         )
     }
 }

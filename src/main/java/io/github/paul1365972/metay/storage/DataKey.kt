@@ -9,8 +9,6 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.util.function.BiConsumer
-import java.util.function.Function
 
 class DataKey<T>(
         //TODO Non null this, testing only
