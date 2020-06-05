@@ -35,9 +35,9 @@ class CacheDataStore<L> @JvmOverloads constructor(
         underlying.remove(dataKey, locationKey)
     }
 
-    override fun onClose() {
+    override fun close() {
         loaded.forEach { (k, v) -> save(k.first, k.second, v) }
-        super.onClose()
+        super.close()
         loaded.clear()
     }
 

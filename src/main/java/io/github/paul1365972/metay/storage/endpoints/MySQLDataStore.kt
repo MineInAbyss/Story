@@ -55,7 +55,7 @@ class MySQLDataStore(
         selectStatement.executeUpdate()
     }
 
-    override fun onClose() {
+    override fun close() {
         selectStatement.close()
         insertStatement.close()
         deleteStatement.close()

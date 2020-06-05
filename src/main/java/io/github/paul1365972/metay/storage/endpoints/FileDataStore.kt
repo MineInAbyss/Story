@@ -20,7 +20,7 @@ class FileDataStore(
         }
     }
 
-    override fun onClose() {
+    override fun close() {
         DataOutputStream(ZipOutputStream(FileOutputStream(file))).use { dos ->
             dos.writeInt(map.size)
             map.forEach {

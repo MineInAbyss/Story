@@ -18,14 +18,14 @@ public class JavaTest {
 			oos.writeUTF(o.b);
 		}, (ois) -> new MagicData(ois.readInt(), ois.readUTF()));
 		
-		blockStore.update(magicKey, loc, (value) -> {
+		blockStore.compute(magicKey, loc, (value) -> {
 			if (value == null)
 				value = new MagicData(0, "lorem");
 			value.a += 3;
 			return value;
 		});
 		
-		blockStore.compute(magicKey, loc, (access, value) -> {
+		blockStore.update(magicKey, loc, (access, value) -> {
 			if (value == null)
 				value = new MagicData(0, "lorem");
 			value.a += 3;

@@ -8,14 +8,30 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 public interface MetayService {
+	
+	/**
+	 * @return The public data store for accessing block level data
+	 */
 	MetayDataStore<Location> getBlockStore();
 	
+	/**
+	 * @return The public data store for accessing chunk level data
+	 */
 	MetayDataStore<Chunk> getChunkStore();
 	
+	/**
+	 * @return The public data store for accessing world level data
+	 */
 	MetayDataStore<World> getWorldStore();
 	
+	/**
+	 * @return The public data store for accessing entity level data
+	 */
 	MetayDataStore<Entity> getEntityStore();
 	
+	/**
+	 * @return The public data store for accessing item level data
+	 */
 	MetayDataStore<ItemStack> getItemStore();
 	
 }

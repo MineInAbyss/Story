@@ -71,25 +71,30 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	@Override
 	public void onDisable() {
 		Arrays.asList(blockStore, chunkStore, worldStore, entityStore, itemStore)
-				.forEach(MetayDataStore::onClose);
+				.forEach(MetayDataStore::close);
 	}
 	
+	@Override
 	public MetayDataStore<Location> getBlockStore() {
 		return blockStore;
 	}
 	
+	@Override
 	public MetayDataStore<Chunk> getChunkStore() {
 		return chunkStore;
 	}
 	
+	@Override
 	public MetayDataStore<World> getWorldStore() {
 		return worldStore;
 	}
 	
+	@Override
 	public MetayDataStore<Entity> getEntityStore() {
 		return entityStore;
 	}
 	
+	@Override
 	public MetayDataStore<ItemStack> getItemStore() {
 		return itemStore;
 	}

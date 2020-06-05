@@ -49,7 +49,7 @@ class FileChunkedDataStore<L>(
         }
     }
 
-    override fun onClose() {
+    override fun close() {
         chunks.forEach { (k, v) -> unload(k, v) }
         chunks.clear()
     }
