@@ -24,6 +24,7 @@ class CacheDataStore<L>(
     override fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T) {
         val key = (dataKey to locationKey) as Pair<DataKey<Any?>, L>
         loaded[key] = value
+        underlying.put(dataKey, locationKey, value)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -36,6 +37,7 @@ class CacheDataStore<L>(
     override fun onClose() {
         loaded.forEach { (k, v) -> save(k.first, k.second, v) }
         super.onClose()
+        loaded.clear()
     }
 
     private fun <T> save(dataKey: DataKey<T>, locationKey: L, value: T) {

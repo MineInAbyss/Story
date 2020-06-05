@@ -30,5 +30,6 @@ class FileDataStore(
                 dos.write(it.value)
             }
         }
+        map.clear()
     }
 }

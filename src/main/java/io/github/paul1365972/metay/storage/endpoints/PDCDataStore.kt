@@ -2,11 +2,8 @@ package io.github.paul1365972.metay.storage.endpoints
 
 import io.github.paul1365972.metay.storage.DataKey
 import io.github.paul1365972.metay.storage.MetayDataStore
-import org.bukkit.NamespacedKey
-import org.bukkit.entity.Entity
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
-import java.sql.Connection
 
 class PDCDataStore : MetayDataStore<PersistentDataHolder> {
 

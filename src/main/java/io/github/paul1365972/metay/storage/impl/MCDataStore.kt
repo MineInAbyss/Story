@@ -1,15 +1,15 @@
 package io.github.paul1365972.metay.storage.impl
 
- import io.github.paul1365972.metay.storage.MetayDataStore
- import io.github.paul1365972.metay.storage.TransformingDataStore
- import org.bukkit.Chunk
- import org.bukkit.block.Block
- import org.bukkit.entity.Entity
- import org.bukkit.inventory.ItemStack
- import org.bukkit.persistence.PersistentDataHolder
- import java.util.*
+import io.github.paul1365972.metay.storage.MetayDataStore
+import io.github.paul1365972.metay.storage.TransformingDataStore
+import org.bukkit.Chunk
+import org.bukkit.block.Block
+import org.bukkit.entity.Entity
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataHolder
+import java.util.*
 
-//TODO this is a bit experimental, probably dont need to convert the <location> to string
+//TODO this is a bit experimental, probably dont need to convert the <location> to string so aggressively
 
 class UUIDDataStore(
         underlying: MetayDataStore<String>

@@ -7,7 +7,7 @@ class SizedHashMap<K, V>(
         val overflowListener: (K, V) -> Unit
 ) : LinkedHashMap<K, V>(maxSize, 0.75f, true) {
     override fun removeEldestEntry(eldest: Map.Entry<K, V>): Boolean {
-        if (maxSize < size) {
+        if (maxSize != -1 && size > maxSize) {
             overflowListener(eldest.key, eldest.value)
             return true
         }

@@ -6,14 +6,14 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ExposedDataStore(
+class ExposedDBDataStore(
         val database: Database,
         tableName: String,
         keyColumn: String = "key",
         bytesColumn: String = "bytes"
 ) : MetayDataStore<String> {
 
-    private val table = object : Table() {
+    private val table = object : Table(tableName) {
         val key = varchar(keyColumn, length = 127)
         val bytes = blob(bytesColumn)
 
