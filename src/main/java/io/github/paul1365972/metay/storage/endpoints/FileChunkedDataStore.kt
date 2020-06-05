@@ -15,6 +15,11 @@ class FileChunkedDataStore<L>(
         val chunkingFunction: (L) -> String
 ) : MetayDataStore<L> {
 
+    init {
+        if (!folder.exists() && !folder.mkdirs())
+            throw FileNotFoundException("Could not find or create data folder '${folder.path}'")
+    }
+
     protected val chunks = SizedHashMap<String, Chunk<String>>(chunkCacheSize) { k, v -> unload(k, v) }
 
     override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {
