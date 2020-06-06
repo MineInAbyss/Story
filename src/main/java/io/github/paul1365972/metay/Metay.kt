@@ -67,11 +67,8 @@ class Metay : JavaPlugin(), MetayService {
     }
 
     override fun onLoad() {
-        // TODO maybe register on enable
         server.servicesManager.register(MetayService::class.java, this, this, ServicePriority.Normal)
     }
-
-    override fun onEnable() {}
 
     override fun onDisable() {
         listOf(blockStore, chunkStore, worldStore, tileEntityStore, entityStore, itemStore)

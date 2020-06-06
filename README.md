@@ -49,6 +49,20 @@ service.entityStore.update(magicKey, entity) {
 }
 ```
 
+You can also define nice extension functions
+```kotlin
+var Location.magicData: MagicData?
+    get() = blockStore.get(magicKey, this)
+    set(value) = blockStore.set(magicKey, this, value)
+
+var Location.magicDataS: MagicData
+    get() = blockStore.get(magicKey, this) { MagicData(0, "lorem") }
+    set(value) = blockStore.put(magicKey, this, value)
+
+
+loc.magicDataS.a += 3 // Dont do this as this doesnt call set, which could be bad TODO
+```
+
 ### Custom data stores
 
 You can also create custom data stores in case the predefined ones are lacking.
