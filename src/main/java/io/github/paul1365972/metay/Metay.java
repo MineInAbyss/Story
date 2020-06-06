@@ -1,7 +1,5 @@
 package io.github.paul1365972.metay;
 
-import io.github.paul1365972.metay.listener.BlockListener;
-import io.github.paul1365972.metay.listener.LoadingListener;
 import io.github.paul1365972.metay.storage.CacheDataStore;
 import io.github.paul1365972.metay.storage.MetayDataStore;
 import io.github.paul1365972.metay.storage.NullableDataStore;
@@ -17,7 +15,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.plugin.ServicePriority;
@@ -26,7 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Arrays;
 
-public final class Metay extends JavaPlugin implements MetayService, Listener {
+public final class Metay extends JavaPlugin implements MetayService {
 	
 	private MetayDataStore<Location> blockStore = null;
 	private MetayDataStore<Chunk> chunkStore = null;
@@ -76,8 +73,6 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	
 	@Override
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(new LoadingListener(this), this);
-		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getServicesManager().register(MetayService.class, this, this, ServicePriority.Normal);
 	}
 	
