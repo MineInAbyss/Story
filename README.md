@@ -51,7 +51,7 @@ You can also create custom data stores in case the predefined ones are lacking.
 itemStore = new CacheDataStore<>(
         new TransformingDataStore<>(
         new PDCDataStore(), ItemStack::getItemMeta),
-        4096)
+        cacheSize = 4096)
 ```
 
 Also remember to close the data store `itemStore.close()`
