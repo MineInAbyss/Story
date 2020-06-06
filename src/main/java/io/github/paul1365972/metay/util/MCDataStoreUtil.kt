@@ -2,8 +2,10 @@ package io.github.paul1365972.metay.util
 
 import org.bukkit.Chunk
 import org.bukkit.Location
+import org.bukkit.World
 
 object MCDataStoreUtil {
+
     @JvmStatic
     fun normalizeLocation(loc: Location) = Location(loc.world, loc.blockX.toDouble(), loc.blockY.toDouble(), loc.blockZ.toDouble())
 
@@ -18,4 +20,7 @@ object MCDataStoreUtil {
 
     @JvmStatic
     fun toSuperChunkKey(chunk: Chunk) = "${chunk.world.uid}:${chunk.x / 16}:${chunk.z / 16}"
+
+    @JvmStatic
+    fun toWorldKey(world: World) = world.uid.toString()
 }

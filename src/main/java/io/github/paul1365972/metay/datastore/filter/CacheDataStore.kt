@@ -7,7 +7,7 @@ import io.github.paul1365972.metay.util.SizedHashMap
 class CacheDataStore<L> @JvmOverloads constructor(
         underlying: MetayDataStore<L>,
         val cacheSize: Int,
-        val cacheKey: (L) -> Any? = { it }
+        val cacheKeyMapper: (L) -> Any? = { it }
 ) : FilterDataStore<L>(underlying) {
 
     private val loaded = SizedHashMap<Pair<DataKey<Any?>, L>, Any?>(cacheSize) { k, v -> save(k.first, k.second, v) }
