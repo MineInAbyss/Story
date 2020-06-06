@@ -4,6 +4,7 @@ import io.github.paul1365972.metay.listener.BlockListener;
 import io.github.paul1365972.metay.listener.LoadingListener;
 import io.github.paul1365972.metay.storage.CacheDataStore;
 import io.github.paul1365972.metay.storage.MetayDataStore;
+import io.github.paul1365972.metay.storage.NullableDataStore;
 import io.github.paul1365972.metay.storage.TransformingDataStore;
 import io.github.paul1365972.metay.storage.endpoints.FileChunkedDataStore;
 import io.github.paul1365972.metay.storage.endpoints.FolderDataStore;
@@ -12,10 +13,13 @@ import io.github.paul1365972.metay.util.MCDataStoreUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +31,7 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	private MetayDataStore<Location> blockStore = null;
 	private MetayDataStore<Chunk> chunkStore = null;
 	private MetayDataStore<World> worldStore = null;
+	private MetayDataStore<Block> tileEntityStore = null;
 	private MetayDataStore<Entity> entityStore = null;
 	private MetayDataStore<ItemStack> itemStore = null;
 	
@@ -50,6 +55,14 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 		worldStore = new CacheDataStore<>(
 				new FolderDataStore<>(new File(getDataFolder(), "world"), world -> world.getUID().toString()),
 				128, World::getUID);
+		// Not sure how this will be used either, so just going with 50 player with 20 blocks each seems reasonable
+		tileEntityStore = new CacheDataStore<>(
+				new NullableDataStore<>(new PDCDataStore(), block -> {
+					BlockState state = block.getState();
+					// Check if tile state
+					return state instanceof PersistentDataHolder ? (PersistentDataHolder) state : null;
+				}),
+				1024, tileState -> tileState);
 		// Do we need to make the entity object the key ("identity" keys) or the uuid?
 		// Cache size just guesstimated, 50 players with ~100 mobs each expected
 		entityStore = new CacheDataStore<>(
@@ -70,7 +83,7 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	
 	@Override
 	public void onDisable() {
-		Arrays.asList(blockStore, chunkStore, worldStore, entityStore, itemStore)
+		Arrays.asList(blockStore, chunkStore, worldStore, tileEntityStore, entityStore, itemStore)
 				.forEach(MetayDataStore::close);
 	}
 	
@@ -87,6 +100,11 @@ public final class Metay extends JavaPlugin implements MetayService, Listener {
 	@Override
 	public MetayDataStore<World> getWorldStore() {
 		return worldStore;
+	}
+	
+	@Override
+	public MetayDataStore<Block> getTileEntityStore() {
+		return tileEntityStore;
 	}
 	
 	@Override

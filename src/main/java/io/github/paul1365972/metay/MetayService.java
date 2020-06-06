@@ -4,6 +4,7 @@ import io.github.paul1365972.metay.storage.MetayDataStore;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,6 +24,11 @@ public interface MetayService {
 	 * @return The public data store for accessing world level data
 	 */
 	MetayDataStore<World> getWorldStore();
+	
+	/**
+	 * @return The public data store for accessing tile entity level data
+	 */
+	MetayDataStore<Block> getTileEntityStore();
 	
 	/**
 	 * @return The public data store for accessing entity level data
