@@ -4,7 +4,7 @@ import io.github.paul1365972.metay.datastore.DataKey
 import io.github.paul1365972.metay.datastore.MetayDataStore
 
 open class TransformingDataStore<L, K>(
-        val underlying: MetayDataStore<K>,
+        val underlying: MetayDataStore<in K>,
         val transformer: (L) -> K
 ) : MetayDataStore<L> {
     override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {

@@ -43,14 +43,17 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        name 'papermc'
-        url 'https://papermc.io/repo/repository/maven-public/'
+        name 'spigot-repo'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name 'sonatype'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
 }
 
 dependencies {
-    //compileOnly "org.spigotmc:spigot-api:$serverVersion"
-    compileOnly "com.destroystokyo.paper:paper-api:$serverVersion"
+    compileOnly "org.spigotmc:spigot-api:$serverVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxserializationVersion"
