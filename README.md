@@ -5,7 +5,9 @@ Basic Paper plugin for attaching custom data to Blocks, Chunks, Worlds, Items, P
 
 ## Example
 
-You want to attatch some data to e.g. an entity.
+### Basic data management
+
+You can attach some data to e.g. an entity.
 
 Create you magic data class and instantiate a DataKey
 ```kotlin
@@ -30,8 +32,26 @@ val data = service.entityStore.get(magicKey, entity)
 service.entityStore.put(magicKey, entity, data)
 
 service.entityStore.compute(magicKey, entity) {
-    (it ?: MagicData(0, "lorem")).apply {
-        a += 3
-    }
+    val data = it ?: MagicData(0, "lorem")
+    data.a += 3
+}
+
+service.entityStore.update(magicKey, entity) {
+    val value = it ?: MagicData(0, "lorem")
+    value.a += 3
+    set(value)
 }
 ```
+
+### Custom data stores
+
+You can also create custom data stores in case the predefined ones are lacking.
+
+```kotlin
+itemStore = new CacheDataStore<>(
+        new TransformingDataStore<>(
+        new PDCDataStore(), ItemStack::getItemMeta),
+        4096)
+```
+
+Also remember to close the data store `itemStore.close()`

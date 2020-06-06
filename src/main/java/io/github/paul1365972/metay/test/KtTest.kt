@@ -28,9 +28,8 @@ fun test() {
     }
 
     blockStore.update(magicKey, loc) {
-        set((it ?: MagicData(0, "lorem")).apply {
-            a += 3
-        }
-        )
+        val value = it ?: MagicData(0, "lorem")
+        value.a += 3
+        set(value)
     }
 }
