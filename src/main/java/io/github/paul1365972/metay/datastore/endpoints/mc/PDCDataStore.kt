@@ -1,7 +1,7 @@
-package io.github.paul1365972.metay.storage.endpoints
+package io.github.paul1365972.metay.datastore.endpoints.mc
 
-import io.github.paul1365972.metay.storage.DataKey
-import io.github.paul1365972.metay.storage.MetayDataStore
+import io.github.paul1365972.metay.datastore.DataKey
+import io.github.paul1365972.metay.datastore.MetayDataStore
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
 

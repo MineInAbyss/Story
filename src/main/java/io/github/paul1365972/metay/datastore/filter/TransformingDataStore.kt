@@ -1,4 +1,7 @@
-package io.github.paul1365972.metay.storage
+package io.github.paul1365972.metay.datastore.filter
+
+import io.github.paul1365972.metay.datastore.DataKey
+import io.github.paul1365972.metay.datastore.MetayDataStore
 
 open class TransformingDataStore<L, K>(
         val underlying: MetayDataStore<K>,

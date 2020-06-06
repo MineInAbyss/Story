@@ -1,5 +1,7 @@
-package io.github.paul1365972.metay.storage
+package io.github.paul1365972.metay.datastore.filter
 
+import io.github.paul1365972.metay.datastore.DataKey
+import io.github.paul1365972.metay.datastore.MetayDataStore
 import io.github.paul1365972.metay.util.SizedHashMap
 
 class CacheDataStore<L> @JvmOverloads constructor(

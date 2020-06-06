@@ -1,4 +1,4 @@
-package io.github.paul1365972.metay.storage
+package io.github.paul1365972.metay.datastore
 
 class DataSetter<T>(
         private var data: T

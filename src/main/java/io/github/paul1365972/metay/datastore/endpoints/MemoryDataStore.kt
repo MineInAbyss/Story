@@ -1,7 +1,7 @@
-package io.github.paul1365972.metay.storage.endpoints
+package io.github.paul1365972.metay.datastore.endpoints
 
-import io.github.paul1365972.metay.storage.DataKey
-import io.github.paul1365972.metay.storage.MetayDataStore
+import io.github.paul1365972.metay.datastore.DataKey
+import io.github.paul1365972.metay.datastore.MetayDataStore
 
 open class MemoryDataStore<L> : MetayDataStore<L> {
 

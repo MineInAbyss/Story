@@ -1,12 +1,12 @@
 package io.github.paul1365972.metay;
 
-import io.github.paul1365972.metay.storage.CacheDataStore;
-import io.github.paul1365972.metay.storage.MetayDataStore;
-import io.github.paul1365972.metay.storage.NullableDataStore;
-import io.github.paul1365972.metay.storage.TransformingDataStore;
-import io.github.paul1365972.metay.storage.endpoints.FileChunkedDataStore;
-import io.github.paul1365972.metay.storage.endpoints.FolderDataStore;
-import io.github.paul1365972.metay.storage.endpoints.PDCDataStore;
+import io.github.paul1365972.metay.datastore.filter.CacheDataStore;
+import io.github.paul1365972.metay.datastore.MetayDataStore;
+import io.github.paul1365972.metay.datastore.filter.NullableDataStore;
+import io.github.paul1365972.metay.datastore.filter.TransformingDataStore;
+import io.github.paul1365972.metay.datastore.endpoints.file.FileChunkedDataStore;
+import io.github.paul1365972.metay.datastore.endpoints.file.FolderDataStore;
+import io.github.paul1365972.metay.datastore.endpoints.mc.PDCDataStore;
 import io.github.paul1365972.metay.util.MCDataStoreUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

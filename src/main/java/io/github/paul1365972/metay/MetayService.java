@@ -1,6 +1,6 @@
 package io.github.paul1365972.metay;
 
-import io.github.paul1365972.metay.storage.MetayDataStore;
+import io.github.paul1365972.metay.datastore.MetayDataStore;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;

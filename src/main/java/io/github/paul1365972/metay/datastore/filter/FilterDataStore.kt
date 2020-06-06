@@ -1,4 +1,6 @@
-package io.github.paul1365972.metay.storage
+package io.github.paul1365972.metay.datastore.filter
+
+import io.github.paul1365972.metay.datastore.MetayDataStore
 
 abstract class FilterDataStore<L>(
         val underlying: MetayDataStore<L>

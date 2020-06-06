@@ -1,7 +1,7 @@
 package io.github.paul1365972.metay.test
 
-import io.github.paul1365972.metay.storage.DataKey
-import io.github.paul1365972.metay.storage.endpoints.MemoryDataStore
+import io.github.paul1365972.metay.datastore.DataKey
+import io.github.paul1365972.metay.datastore.endpoints.MemoryDataStore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
