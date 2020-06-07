@@ -1,4 +1,4 @@
-package io.github.paul1365972.metay.datastore.filter
+package io.github.paul1365972.metay.datastore.filters
 
 import io.github.paul1365972.metay.datastore.MetayDataStore
 

@@ -17,16 +17,15 @@ class FolderDataStore<L>(
             throw FileNotFoundException("Could not find or create data folder '${folder.path}'")
     }
 
-    override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserializer(it) }
     }
 
-    override fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T) {
-        return save(toFileName(dataKey, locationKey), dataKey.serializer(value))
-    }
-
-    override fun <T> remove(dataKey: DataKey<T>, locationKey: L) {
-        Files.deleteIfExists(File(folder, toFileName(dataKey, locationKey)).toPath())
+    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+        if (value != null)
+            save(toFileName(dataKey, locationKey), dataKey.serializer(value))
+        else
+            Files.deleteIfExists(File(folder, toFileName(dataKey, locationKey)).toPath())
     }
 
     protected fun toFileName(dataKey: DataKey<*>, locationKey: L): String {

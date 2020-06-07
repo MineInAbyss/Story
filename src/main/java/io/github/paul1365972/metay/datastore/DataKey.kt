@@ -10,7 +10,7 @@ import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-class DataKey<T>(
+class DataKey<T : Any>(
         //TODO Non null this, testing only
         val plugin: JavaPlugin?,
         val name: String,

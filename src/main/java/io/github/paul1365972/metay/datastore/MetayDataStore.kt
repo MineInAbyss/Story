@@ -16,32 +16,24 @@ interface MetayDataStore<L> {
      *
      * @return The deserialized value (that may be null) or null if the value is absent
      */
-    fun <T> get(dataKey: DataKey<T>, locationKey: L): T?
+    fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T?
 
     /**
      * @see [get]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T> get(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T): T {
+    fun <T : Any> get(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T): T {
         return get(dataKey, locationKey) ?: defaultValue(locationKey)
     }
 
     /**
-     * Serializes the value and saves it.
+     * Serializes the value and saves it. If the value is null the specified data is removed from the location.
      *
      * @param dataKey Key for the data
      * @param locationKey Location of the value
-     * @param value Value to be stored
+     * @param value Value to be stored, or null to delete
      */
-    fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T)
-
-    /**
-     * Removes the specified data from the location.
-     *
-     * @param dataKey Key for the data
-     * @param locationKey Location of the value
-     */
-    fun <T> remove(dataKey: DataKey<T>, locationKey: L)
+    fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?)
 
     /**
      * Computes a new value at the specified location.
@@ -54,9 +46,9 @@ interface MetayDataStore<L> {
      *
      * @return The computed value
      */
-    fun <T> compute(dataKey: DataKey<T>, locationKey: L, block: (T?) -> T?): T? {
+    fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, block: (T?) -> T?): T? {
         val modified = block(get(dataKey, locationKey))
-        set(dataKey, locationKey, modified)
+        put(dataKey, locationKey, modified)
         return modified
     }
 
@@ -64,7 +56,7 @@ interface MetayDataStore<L> {
      * @see [compute]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T> compute(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: (T) -> T): T {
+    fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: (T) -> T): T {
         val modified = block(get(dataKey, locationKey) ?: defaultValue(locationKey))
         put(dataKey, locationKey, modified)
         return modified
@@ -80,11 +72,11 @@ interface MetayDataStore<L> {
      *
      * @return The updated value
      */
-    fun <T> update(dataKey: DataKey<T>, locationKey: L, block: DataSetter<T?>.(T?) -> Unit): T? {
+    fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, block: DataSetter<T?>.(T?) -> Unit): T? {
         val modified = DataSetter(get(dataKey, locationKey))
         block(modified, modified.get())
         if (modified.hasChanged())
-            set(dataKey, locationKey, modified.get())
+            put(dataKey, locationKey, modified.get())
         return modified.get()
     }
 
@@ -92,11 +84,11 @@ interface MetayDataStore<L> {
      * @see [update]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T> update(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: DataSetter<T>.(T) -> Unit): T {
+    fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: DataSetter<T>.(T) -> Unit): T {
         val modified = DataSetter(get(dataKey, locationKey) ?: defaultValue(locationKey))
         block(modified, modified.get())
         if (modified.hasChanged())
-            set(dataKey, locationKey, modified.get())
+            put(dataKey, locationKey, modified.get())
         return modified.get()
     }
 
@@ -109,26 +101,16 @@ interface MetayDataStore<L> {
      *
      * @return The value delegate
      */
-    fun <T> access(dataKey: DataKey<T>, locationKey: L): ReadWriteProperty<Any?, T?> {
+    fun <T : Any> access(dataKey: DataKey<T>, locationKey: L): ReadWriteProperty<Any?, T?> {
         return object : ReadWriteProperty<Any?, T?> {
             override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
                 return get(dataKey, locationKey)
             }
+
             override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-                set(dataKey, locationKey, value)
+                put(dataKey, locationKey, value)
             }
         }
-    }
-
-    /**
-     * Serializes the value and saves it, or removes it if value is null
-     *
-     * @param dataKey Key for the data
-     * @param locationKey Location of the value
-     * @param value Value to be stored or null to remove
-     */
-    fun <T> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
-        if (value != null) put(dataKey, locationKey, value) else remove(dataKey, locationKey)
     }
 
     /**

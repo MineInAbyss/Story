@@ -7,17 +7,16 @@ open class MemoryDataStore<L> : MetayDataStore<L> {
 
     protected val map = mutableMapOf<Pair<String, L>, ByteArray>()
 
-    override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         return map[dataKey.namespacedName to locationKey]?.let {
             dataKey.deserializer(it)
         }
     }
 
-    override fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T) {
-        map[dataKey.namespacedName to locationKey] = dataKey.serializer(value)
-    }
-
-    override fun <T> remove(dataKey: DataKey<T>, locationKey: L) {
-        map.remove(dataKey.namespacedName to locationKey)
+    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+        if (value != null)
+            map[dataKey.namespacedName to locationKey] = dataKey.serializer(value)
+        else
+            map.remove(dataKey.namespacedName to locationKey)
     }
 }

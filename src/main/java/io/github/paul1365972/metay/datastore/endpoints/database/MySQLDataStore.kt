@@ -36,7 +36,7 @@ class MySQLDataStore(
         }
     }
 
-    override fun <T> get(dataKey: DataKey<T>, locationKey: String): T? {
+    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: String): T? {
         selectStatement.setString(1, toKey(dataKey, locationKey))
         val resultset = selectStatement.executeQuery()
         if (resultset.first())
@@ -44,15 +44,15 @@ class MySQLDataStore(
         return null
     }
 
-    override fun <T> put(dataKey: DataKey<T>, locationKey: String, value: T) {
-        selectStatement.setString(1, toKey(dataKey, locationKey))
-        selectStatement.setBytes(2, dataKey.serializer(value))
-        selectStatement.executeUpdate()
-    }
-
-    override fun <T> remove(dataKey: DataKey<T>, locationKey: String) {
-        selectStatement.setString(1, toKey(dataKey, locationKey))
-        selectStatement.executeUpdate()
+    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: String, value: T?) {
+        if (value != null) {
+            selectStatement.setString(1, toKey(dataKey, locationKey))
+            selectStatement.setBytes(2, dataKey.serializer(value))
+            selectStatement.executeUpdate()
+        } else {
+            selectStatement.setString(1, toKey(dataKey, locationKey))
+            selectStatement.executeUpdate()
+        }
     }
 
     override fun close() {
@@ -62,7 +62,7 @@ class MySQLDataStore(
     }
 
     // TODO
-    fun <T> putBatch(data: Map<Pair<DataKey<T>, String>, T>) {
+    fun <T : Any> putBatch(data: Map<Pair<DataKey<T>, String>, T>) {
         data.forEach { (k, v) ->
             selectStatement.setString(1, toKey(k.first, k.second))
             selectStatement.setBytes(2, k.first.serializer(v))

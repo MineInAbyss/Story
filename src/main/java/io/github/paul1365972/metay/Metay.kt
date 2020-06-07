@@ -1,11 +1,11 @@
 package io.github.paul1365972.metay
 
 import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.metay.datastore.caches.CacheDataStore
 import io.github.paul1365972.metay.datastore.endpoints.file.FileChunkedDataStore
 import io.github.paul1365972.metay.datastore.endpoints.file.FolderDataStore
 import io.github.paul1365972.metay.datastore.endpoints.mc.PDCDataStore
-import io.github.paul1365972.metay.datastore.filter.CacheDataStore
-import io.github.paul1365972.metay.datastore.filter.NullableDataStore
+import io.github.paul1365972.metay.datastore.filters.NullableDataStore
 import org.bukkit.Chunk
 import org.bukkit.Location
 import org.bukkit.World

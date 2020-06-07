@@ -22,7 +22,7 @@ class FileChunkedDataStore<L>(
 
     protected val chunks = SizedHashMap<String, Chunk<String>>(chunkCacheSize) { k, v -> unload(k, v) }
 
-    override fun <T> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = chunks[chunkKey] ?: load(chunkKey)?.also { chunks[chunkKey] = it }
         return chunk?.let {
@@ -32,20 +32,14 @@ class FileChunkedDataStore<L>(
         }
     }
 
-    override fun <T> put(dataKey: DataKey<T>, locationKey: L, value: T) {
+    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
         val chunkName = chunkingFunction(locationKey)
         val chunk = chunks.computeIfAbsent(chunkName) { k -> load(k) ?: Chunk() }
         chunk.dirty = true
-        chunk.data[dataKey.namespacedName to transformer(locationKey)] = dataKey.serializer(value)
-    }
-
-    override fun <T> remove(dataKey: DataKey<T>, locationKey: L) {
-        val chunkName = chunkingFunction(locationKey)
-        val chunk = chunks.computeIfAbsent(chunkName) { k -> load(k) ?: Chunk() }
-        chunk.dirty = true
-        chunk.data.remove(dataKey.namespacedName to transformer(locationKey))
-        if (chunk.data.isEmpty()) {
-            chunks.remove(chunkName)
+        if (value != null) {
+            chunk.data[dataKey.namespacedName to transformer(locationKey)] = dataKey.serializer(value)
+        } else {
+            chunk.data.remove(dataKey.namespacedName to transformer(locationKey))
         }
     }
 

@@ -26,7 +26,7 @@ class ExposedDBDataStore(
         }
     }
 
-    override fun <T> get(dataKey: DataKey<T>, locationKey: String): T? {
+    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: String): T? {
         val key = toKey(dataKey, locationKey)
         return transaction(database) {
             table.select {
@@ -37,21 +37,20 @@ class ExposedDBDataStore(
         }
     }
 
-    override fun <T> put(dataKey: DataKey<T>, locationKey: String, value: T) {
+    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: String, value: T?) {
         val key = toKey(dataKey, locationKey)
-        return transaction(database) {
-            table.replace {
-                it[table.key] = key
-                it[table.bytes] = ExposedBlob(dataKey.serializer(value))
+        if (value != null) {
+            transaction(database) {
+                table.replace {
+                    it[table.key] = key
+                    it[table.bytes] = ExposedBlob(dataKey.serializer(value))
+                }
             }
-        }
-    }
-
-    override fun <T> remove(dataKey: DataKey<T>, locationKey: String) {
-        val key = toKey(dataKey, locationKey)
-        return transaction(database) {
-            table.deleteWhere {
-                table.key.eq(key)
+        } else {
+            transaction(database) {
+                table.deleteWhere {
+                    table.key.eq(key)
+                }
             }
         }
     }
