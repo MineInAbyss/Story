@@ -37,13 +37,8 @@ fun test() {
     }
     loc.magicData!!.a = 3
 
-    loc.magicDataS.a += 3
 }
 
 var Location.magicData: MagicData?
     get() = blockStore.get(magicKey, this)
-    set(value) = blockStore.set(magicKey, this, value)
-
-var Location.magicDataS: MagicData
-    get() = blockStore.get(magicKey, this) { MagicData(0, "lorem") }
     set(value) = blockStore.put(magicKey, this, value)
