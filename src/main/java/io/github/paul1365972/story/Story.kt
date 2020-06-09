@@ -26,7 +26,8 @@ class Story : JavaPlugin(), StoryService {
     override val blockStore: StoryDataStore<Location> by registerLazy {
         CacheDataStore<Location>(
                 FileChunkedDataStore(File(dataFolder, "block"), 256, MC::toChunkKey, MC::toBlockKey),
-                1024, MC::toBlockKey)
+                1024, MC::toBlockKey
+        )
     }
 
     // We load max 512 super chunks at a time, just guessing
@@ -34,21 +35,24 @@ class Story : JavaPlugin(), StoryService {
     override val chunkStore: StoryDataStore<Chunk> by registerLazy {
         CacheDataStore<Chunk>(
                 FileChunkedDataStore(File(dataFolder, "chunk"), 512, MC::toSuperChunkKey, MC::toChunkKey),
-                8192, MC::toChunkKey)
+                8192, MC::toChunkKey
+        )
     }
 
     // We wont have more than 128 worlds
     override val worldStore: StoryDataStore<World> by registerLazy {
         CacheDataStore<World>(
                 FolderDataStore(File(dataFolder, "world"), MC::toWorldKey),
-                128, World::getUID)
+                128, World::getUID
+        )
     }
 
     // Not sure how this will be used either, so just going with 50 player with 20 blocks each seems reasonable
     override val tileEntityStore: StoryDataStore<Block> by registerLazy {
         CacheDataStore<Block>(
                 NullableDataStore(PDCDataStore(), { it.state as? PersistentDataHolder }),
-                1024, { it })
+                1024, { it }
+        )
     }
 
     // Do we need to make the entity object the key ("identity" keys) or the uuid?
@@ -56,14 +60,16 @@ class Story : JavaPlugin(), StoryService {
     override val entityStore: StoryDataStore<Entity> by registerLazy {
         CacheDataStore<Entity>(
                 PDCDataStore(),
-                8124, { it.uniqueId })
+                8124, { it.uniqueId }
+        )
     }
 
     // 4096 should be enough when we expect ~50 players with their inventories
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
-                4096)
+                4096
+        )
     }
 
     private val activeDataStores = mutableListOf<Lazy<StoryDataStore<*>>>()

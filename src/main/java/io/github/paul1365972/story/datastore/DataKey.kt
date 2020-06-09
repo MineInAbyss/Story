@@ -15,9 +15,11 @@ class DataKey<T : Any> @JvmOverloads constructor(
         val name: String,
         val serializer: (T) -> ByteArray,
         val deserializer: (ByteArray) -> T,
-        cloner: ((T) -> T)? = null
+        cloner: ((T) -> T)? = null,
+        defaultValue: (() -> T?)? = null
 ) {
     val cloner: ((T) -> T) = cloner ?: { deserializer(serializer(it)) }
+    val defaultValue: (() -> T?) = defaultValue ?: { null }
 
     val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)
     val namespacedName: String = "${plugin.name}:$name"
@@ -27,13 +29,15 @@ class DataKey<T : Any> @JvmOverloads constructor(
                 name: String,
                 serializer: KSerializer<T>,
                 json: Json,
-                cloner: ((T) -> T)? = null
+                cloner: ((T) -> T)? = null,
+                defaultValue: (() -> T?)? = null
     ) : this(
             plugin,
             name,
             { obj -> json.stringify(serializer, obj).toByteArray() },
             { data -> json.parse(serializer, String(data)) },
-            cloner
+            cloner,
+            defaultValue
     )
 
     @JvmOverloads
@@ -41,7 +45,8 @@ class DataKey<T : Any> @JvmOverloads constructor(
                 name: String,
                 serializer: Serializer<T>,
                 deserializer: Deserializer<T>,
-                cloner: ((T) -> T)? = null
+                cloner: ((T) -> T)? = null,
+                defaultValue: (() -> T?)? = null
     ) : this(
             plugin,
             name,
@@ -59,7 +64,8 @@ class DataKey<T : Any> @JvmOverloads constructor(
                     }
                 }
             },
-            cloner
+            cloner,
+            defaultValue
     )
 
     override fun equals(other: Any?): Boolean {

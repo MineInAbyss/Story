@@ -3,7 +3,7 @@ package io.github.paul1365972.story.datastore.filters
 import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
 
-open class NullableDataStore<L, K>(
+class NullableDataStore<L, K>(
         val underlying: StoryDataStore<K>,
         val transformer: (L) -> K?
 ) : StoryDataStore<L> {
