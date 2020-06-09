@@ -1,4 +1,4 @@
-package io.github.paul1365972.story.datastore.endpoints.database
+package io.github.paul1365972.story.datastore.wip
 
 import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore

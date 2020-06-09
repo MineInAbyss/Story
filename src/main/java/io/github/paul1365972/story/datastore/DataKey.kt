@@ -11,8 +11,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 class DataKey<T : Any> @JvmOverloads constructor(
-        //TODO Non null this, testing only
-        val plugin: JavaPlugin?,
+        val plugin: JavaPlugin,
         val name: String,
         val serializer: (T) -> ByteArray,
         val deserializer: (ByteArray) -> T,
@@ -20,12 +19,11 @@ class DataKey<T : Any> @JvmOverloads constructor(
 ) {
     val cloner: ((T) -> T) = cloner ?: { deserializer(serializer(it)) }
 
-    //val namespacedKey: NamespacedKey = NamespacedKey(plugin!!, name) TODO
-    val namespacedKey: NamespacedKey = NamespacedKey.minecraft("todo")
-    val namespacedName: String = "${plugin?.name}:$name"
+    val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)
+    val namespacedName: String = "${plugin.name}:$name"
 
     @JvmOverloads
-    constructor(plugin: JavaPlugin?,
+    constructor(plugin: JavaPlugin,
                 name: String,
                 serializer: KSerializer<T>,
                 json: Json,
@@ -39,7 +37,7 @@ class DataKey<T : Any> @JvmOverloads constructor(
     )
 
     @JvmOverloads
-    constructor(plugin: JavaPlugin?,
+    constructor(plugin: JavaPlugin,
                 name: String,
                 serializer: Serializer<T>,
                 deserializer: Deserializer<T>,

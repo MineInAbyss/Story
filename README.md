@@ -1,5 +1,5 @@
 # Story
-Basic Paper plugin for attaching custom data to:
+Basic Spigot plugin for attaching custom data to: 
 - Worlds
 - Chunks
 - Blocks
@@ -7,7 +7,7 @@ Basic Paper plugin for attaching custom data to:
 - Items
 - Entities (and Players)
 
-**Warning:** This plugin is in an early development stage and has been tested exactly **0** times, use with care
+**Warning:** This plugin is in an early development stage and has been tested exactly **0** times, everything should work, but use with care
 
 ## Example
 
@@ -23,7 +23,7 @@ data class MagicData(
     var b: String
 )
 
-val magicKey = DataKey(plugin, "magic", MagicData.serializer(), Json(JsonConfiguration.Stable))
+val magicKey = DataKey(plugin, "magic", MagicData.serializer(), Json(JsonConfiguration.Stable), { it.copy() })
 ```
 
 Next acquire a story service instance via the JavaPlugin 
@@ -42,12 +42,17 @@ service.entityStore.put(magicKey, entity, value)
 service.entityStore.compute(magicKey, entity) {
     val value = it ?: MagicData(0, "lorem")
     value.a += 3
+    value
 }
 
 service.entityStore.update(magicKey, entity) {
     val value = it ?: MagicData(0, "lorem")
     value.a += 3
     set(value)
+}
+
+service.entityStore.modify(magicKey, entity) {
+    a += 3
 }
 ```
 

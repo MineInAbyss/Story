@@ -21,8 +21,6 @@ import io.github.paul1365972.story.util.MCDataStoreUtil as MC
 class Story : JavaPlugin(), StoryService {
     // TODO Estimate good cache sizes
 
-    private val activeDataStores = mutableListOf<Lazy<StoryDataStore<*>>>()
-
     // Chunk cache size of 1024 seems reasonable if we expect each player to interact with 5 chunks at a time
     // Cache size just guesstimated, as i am still not sure how this will be used
     override val blockStore: StoryDataStore<Location> by registerLazy {
@@ -67,6 +65,8 @@ class Story : JavaPlugin(), StoryService {
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
                 4096)
     }
+
+    private val activeDataStores = mutableListOf<Lazy<StoryDataStore<*>>>()
 
     override fun onLoad() {
         server.servicesManager.register(StoryService::class.java, this, this, ServicePriority.Normal)
