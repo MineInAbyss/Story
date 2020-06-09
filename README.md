@@ -4,8 +4,8 @@ Basic Paper plugin for attaching custom data to:
 - Chunks
 - Blocks
 - Tile Entities
-- Entities (and Players)
 - Items
+- Entities (and Players)
 
 **Warning:** This plugin is in an early development stage and has been tested exactly **0** times, use with care
 
