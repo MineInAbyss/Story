@@ -1,6 +1,7 @@
 package io.github.paul1365972.metay
 
 import io.github.paul1365972.metay.datastore.MetayDataStore
+import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Location
 import org.bukkit.World
@@ -9,6 +10,9 @@ import org.bukkit.entity.Entity
 import org.bukkit.inventory.ItemStack
 
 interface MetayService {
+
+    companion object : @JvmStatic MetayService by Bukkit.getServer().servicesManager.load(MetayService::class.java)!!
+
     /**
      * The public data store for accessing block level data
      */

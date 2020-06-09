@@ -13,7 +13,7 @@ class PDCDataStore : MetayDataStore<PersistentDataHolder> {
         }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: PersistentDataHolder, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: PersistentDataHolder, value: T?) {
         if (value != null)
             locationKey.persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY] = dataKey.serializer(value)
         else

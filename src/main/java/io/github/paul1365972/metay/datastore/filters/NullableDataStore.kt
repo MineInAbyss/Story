@@ -13,9 +13,9 @@ open class NullableDataStore<L, K>(
         }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
         transformer(locationKey)?.let {
-            underlying.put(dataKey, it, value)
+            underlying.set(dataKey, it, value)
         }
     }
 

@@ -1,14 +1,14 @@
-package io.github.paul1365972.metay.test;
-
 import io.github.paul1365972.metay.datastore.DataKey;
 import io.github.paul1365972.metay.datastore.endpoints.MemoryDataStore;
 import kotlin.Unit;
 import org.bukkit.Location;
+import org.junit.Test;
 
 //TODO
 public class JavaTest {
 	
-	void test() {
+	@Test
+	public void test() {
 		Location loc = new Location(null, 0.0, 0.0, 0.0);
 		
 		MemoryDataStore<Location> blockStore = new MemoryDataStore<>();

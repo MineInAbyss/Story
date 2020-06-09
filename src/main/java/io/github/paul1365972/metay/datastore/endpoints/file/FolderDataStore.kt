@@ -21,7 +21,7 @@ class FolderDataStore<L>(
         return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserializer(it) }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
         if (value != null)
             save(toFileName(dataKey, locationKey), dataKey.serializer(value))
         else

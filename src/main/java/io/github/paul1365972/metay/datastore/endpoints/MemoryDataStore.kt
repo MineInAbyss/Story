@@ -13,7 +13,7 @@ open class MemoryDataStore<L> : MetayDataStore<L> {
         }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
         if (value != null)
             map[dataKey.namespacedName to locationKey] = dataKey.serializer(value)
         else

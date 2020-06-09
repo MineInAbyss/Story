@@ -8,7 +8,7 @@ interface MetayDataStore<L> {
     /**
      * Fetches the requested data and deserializes it.
      *
-     * Note: Do not modify the returned value without calling [put] afterwards, as this can cause
+     * Note: Do not modify the returned value without calling [set] afterwards, as this can cause
      * data synchronization problems. Alternatively use [compute] or [update].
      *
      * @param dataKey Key for the value
@@ -33,7 +33,7 @@ interface MetayDataStore<L> {
      * @param locationKey Location of the value
      * @param value Value to be stored, or null to delete
      */
-    fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?)
+    fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?)
 
     /**
      * Computes a new value at the specified location.
@@ -42,13 +42,13 @@ interface MetayDataStore<L> {
      *
      * @param dataKey Key for the data
      * @param locationKey Location of the value
-     * @param block Function to compute the new value, null removes the value
+     * @param block Function to comsete the new value, null removes the value
      *
      * @return The computed value
      */
     fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, block: (T?) -> T?): T? {
         val modified = block(get(dataKey, locationKey))
-        put(dataKey, locationKey, modified)
+        set(dataKey, locationKey, modified)
         return modified
     }
 
@@ -58,7 +58,7 @@ interface MetayDataStore<L> {
      */
     fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: (T) -> T): T {
         val modified = block(get(dataKey, locationKey) ?: defaultValue(locationKey))
-        put(dataKey, locationKey, modified)
+        set(dataKey, locationKey, modified)
         return modified
     }
 
@@ -76,7 +76,7 @@ interface MetayDataStore<L> {
         val modified = DataSetter(get(dataKey, locationKey))
         block(modified, modified.get())
         if (modified.hasChanged())
-            put(dataKey, locationKey, modified.get())
+            set(dataKey, locationKey, modified.get())
         return modified.get()
     }
 
@@ -88,13 +88,40 @@ interface MetayDataStore<L> {
         val modified = DataSetter(get(dataKey, locationKey) ?: defaultValue(locationKey))
         block(modified, modified.get())
         if (modified.hasChanged())
-            put(dataKey, locationKey, modified.get())
+            set(dataKey, locationKey, modified.get())
         return modified.get()
     }
 
     /**
+     * Modifies and saves the value
+     *
+     * @param dataKey Key for the data
+     * @param locationKey Location of the value
+     * @param block Function to modify the value
+     *
+     * @return The modified value
+     */
+    fun <T : Any> modify(dataKey: DataKey<T>, locationKey: L, block: T.() -> Unit): T? {
+        return get(dataKey, locationKey)?.apply {
+            block(this)
+            set(dataKey, locationKey, this)
+        }
+    }
+
+    /**
+     * @see [modify]
+     * Uses the deserialized value or the default value, if the value is null or the data is missing
+     */
+    fun <T : Any> modify(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: T.() -> Unit): T {
+        return (get(dataKey, locationKey) ?: defaultValue(locationKey)).apply {
+            block(this)
+            set(dataKey, locationKey, this)
+        }
+    }
+
+    /**
      * Provides a delegate to the value.
-     * Note: Be careful as the value is only [put] when assigning the value, only modifying its properties does not
+     * Note: Be careful as the value is only [set] when assigning the value, only modifying its properties does not
      *
      * @param dataKey Key for the data
      * @param locationKey Location of the value
@@ -108,7 +135,7 @@ interface MetayDataStore<L> {
             }
 
             override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-                put(dataKey, locationKey, value)
+                set(dataKey, locationKey, value)
             }
         }
     }

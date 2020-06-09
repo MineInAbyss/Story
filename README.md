@@ -31,6 +31,8 @@ Next acquire a metay service instance via the JavaPlugin
 val service: MetayService = server.servicesManager.load(MetayService.class);
 ```
 
+Or use e.g. `MetayService.entityStore` directly
+
 Now with an entity and the data key you can attach, get, modify and update the data
 ```kotlin
 val value = service.entityStore.get(magicKey, entity)
@@ -49,18 +51,15 @@ service.entityStore.update(magicKey, entity) {
 }
 ```
 
-You can also define nice extension functions
+You can also define a nice extension property, but do note that all calls to `loc.magicData` return a new object
 ```kotlin
 var Location.magicData: MagicData?
     get() = blockStore.get(magicKey, this)
     set(value) = blockStore.set(magicKey, this, value)
 
-var Location.magicDataS: MagicData
-    get() = blockStore.get(magicKey, this) { MagicData(0, "lorem") }
-    set(value) = blockStore.put(magicKey, this, value)
-
-
-loc.magicDataS.a += 3 // Dont do this as this doesnt call set, which could be bad TODO
+loc.magicData = (loc.magicData ?: MagicData(0, "lorem")).apply {
+    a += 3
+}
 ```
 
 ### Custom data stores

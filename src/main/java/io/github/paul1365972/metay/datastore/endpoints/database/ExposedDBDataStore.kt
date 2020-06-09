@@ -37,7 +37,7 @@ class ExposedDBDataStore(
         }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: String, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: String, value: T?) {
         val key = toKey(dataKey, locationKey)
         if (value != null) {
             transaction(database) {

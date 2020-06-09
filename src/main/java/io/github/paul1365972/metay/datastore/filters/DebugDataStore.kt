@@ -3,17 +3,18 @@ package io.github.paul1365972.metay.datastore.filters
 import io.github.paul1365972.metay.datastore.DataKey
 import io.github.paul1365972.metay.datastore.MetayDataStore
 
-open class TransformingDataStore<L, K>(
-        val underlying: MetayDataStore<in K>,
-        val transformer: (L) -> K
+class DebugDataStore<L>(
+        val underlying: MetayDataStore<L>
 ) : MetayDataStore<L> {
+
+    override fun close() = underlying.close()
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
-        return underlying.get(dataKey, transformer(locationKey))
+        println("Fetching ${dataKey.name} at $locationKey")
+        return underlying.get(dataKey, locationKey)
     }
 
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
-        underlying.set(dataKey, transformer(locationKey), value)
+        println("Putting ${dataKey.name} with data $value at $locationKey")
+        underlying.set(dataKey, locationKey, value)
     }
-
-    override fun close() = underlying.close()
 }

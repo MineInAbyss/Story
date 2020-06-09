@@ -44,7 +44,7 @@ class MySQLDataStore(
         return null
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: String, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: String, value: T?) {
         if (value != null) {
             selectStatement.setString(1, toKey(dataKey, locationKey))
             selectStatement.setBytes(2, dataKey.serializer(value))

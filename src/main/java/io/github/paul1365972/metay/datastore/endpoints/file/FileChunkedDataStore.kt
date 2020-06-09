@@ -32,7 +32,7 @@ class FileChunkedDataStore<L>(
         }
     }
 
-    override fun <T : Any> put(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
         val chunkName = chunkingFunction(locationKey)
         val chunk = chunks.computeIfAbsent(chunkName) { k -> load(k) ?: Chunk() }
         chunk.dirty = true

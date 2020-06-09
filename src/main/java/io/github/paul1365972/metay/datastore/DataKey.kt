@@ -10,31 +10,40 @@ import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-class DataKey<T : Any>(
+class DataKey<T : Any> @JvmOverloads constructor(
         //TODO Non null this, testing only
         val plugin: JavaPlugin?,
         val name: String,
         val serializer: (T) -> ByteArray,
-        val deserializer: (ByteArray) -> T
+        val deserializer: (ByteArray) -> T,
+        cloner: ((T) -> T)? = null
 ) {
-    val namespacedKey: NamespacedKey = NamespacedKey(plugin!!, name)
+    val cloner: ((T) -> T) = cloner ?: { deserializer(serializer(it)) }
+
+    //val namespacedKey: NamespacedKey = NamespacedKey(plugin!!, name) TODO
+    val namespacedKey: NamespacedKey = NamespacedKey.minecraft("todo")
     val namespacedName: String = "${plugin?.name}:$name"
 
+    @JvmOverloads
     constructor(plugin: JavaPlugin?,
                 name: String,
                 serializer: KSerializer<T>,
-                json: Json
+                json: Json,
+                cloner: ((T) -> T)? = null
     ) : this(
             plugin,
             name,
             { obj -> json.stringify(serializer, obj).toByteArray() },
-            { data -> json.parse(serializer, String(data)) }
+            { data -> json.parse(serializer, String(data)) },
+            cloner
     )
 
+    @JvmOverloads
     constructor(plugin: JavaPlugin?,
                 name: String,
                 serializer: Serializer<T>,
-                deserializer: Deserializer<T>
+                deserializer: Deserializer<T>,
+                cloner: ((T) -> T)? = null
     ) : this(
             plugin,
             name,
@@ -51,7 +60,8 @@ class DataKey<T : Any>(
                         deserializer.apply(it)
                     }
                 }
-            }
+            },
+            cloner
     )
 
     override fun equals(other: Any?): Boolean {
