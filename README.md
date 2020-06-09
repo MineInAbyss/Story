@@ -1,4 +1,4 @@
-# Metay
+# Story
 Basic Paper plugin for attaching custom data to:
 - Worlds
 - Chunks
@@ -26,12 +26,12 @@ data class MagicData(
 val magicKey = DataKey(plugin, "magic", MagicData.serializer(), Json(JsonConfiguration.Stable))
 ```
 
-Next acquire a metay service instance via the JavaPlugin 
+Next acquire a story service instance via the JavaPlugin 
 ```kotlin
-val service: MetayService = server.servicesManager.load(MetayService.class);
+val service: StoryService = server.servicesManager.load(StoryService.class);
 ```
 
-Or use e.g. `MetayService.entityStore` directly
+Or use e.g. `StoryService.entityStore` directly
 
 Now with an entity and the data key you can attach, get, modify and update the data
 ```kotlin

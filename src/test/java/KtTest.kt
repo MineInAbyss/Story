@@ -1,9 +1,9 @@
-package io.github.paul1365972.metay.test
+package io.github.paul1365972.story.test
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.endpoints.MemoryDataStore
-import io.github.paul1365972.metay.datastore.filters.DebugDataStore
-import io.github.paul1365972.metay.datastore.wip.ReferenceDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.endpoints.MemoryDataStore
+import io.github.paul1365972.story.datastore.filters.DebugDataStore
+import io.github.paul1365972.story.datastore.wip.ReferenceDataStore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration

@@ -1,4 +1,4 @@
-package io.github.paul1365972.metay.util
+package io.github.paul1365972.story.util
 
 import java.util.*
 

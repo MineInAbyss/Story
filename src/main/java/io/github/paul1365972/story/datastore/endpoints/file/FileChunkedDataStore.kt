@@ -1,8 +1,8 @@
-package io.github.paul1365972.metay.datastore.endpoints.file
+package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
-import io.github.paul1365972.metay.util.SizedHashMap
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.util.SizedHashMap
 import java.io.*
 import java.util.*
 import java.util.zip.ZipInputStream
@@ -13,7 +13,7 @@ class FileChunkedDataStore<L>(
         val chunkCacheSize: Int,
         val transformer: (L) -> String,
         val chunkingFunction: (L) -> String
-) : MetayDataStore<L> {
+) : StoryDataStore<L> {
 
     init {
         if (!folder.exists() && !folder.mkdirs())

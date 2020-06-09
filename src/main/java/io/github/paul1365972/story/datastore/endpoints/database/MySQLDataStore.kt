@@ -1,7 +1,7 @@
-package io.github.paul1365972.metay.datastore.endpoints.database
+package io.github.paul1365972.story.datastore.endpoints.database
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
 import java.sql.Connection
 
 class MySQLDataStore(
@@ -9,7 +9,7 @@ class MySQLDataStore(
         tableName: String,
         keyColumn: String = "key",
         bytesColumn: String = "bytes"
-) : MetayDataStore<String> {
+) : StoryDataStore<String> {
 
     //TODO I have no clue how mysql works use with great care
     //TODO This code is untested

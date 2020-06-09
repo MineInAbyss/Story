@@ -1,9 +1,9 @@
-package io.github.paul1365972.metay.datastore
+package io.github.paul1365972.story.datastore
 
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-interface MetayDataStore<L> {
+interface StoryDataStore<L> {
 
     /**
      * Fetches the requested data and deserializes it.

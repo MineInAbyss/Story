@@ -1,7 +1,7 @@
-package io.github.paul1365972.metay.datastore.endpoints.file
+package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.endpoints.MemoryDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.endpoints.MemoryDataStore
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Files

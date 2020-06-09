@@ -1,11 +1,11 @@
-package io.github.paul1365972.metay.datastore.endpoints.mc
+package io.github.paul1365972.story.datastore.endpoints.mc
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
 
-class PDCDataStore : MetayDataStore<PersistentDataHolder> {
+class PDCDataStore : StoryDataStore<PersistentDataHolder> {
 
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: PersistentDataHolder): T? {
         return locationKey.persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY]?.let {

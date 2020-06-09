@@ -23,5 +23,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: Metay Plugin JAR
+          name: Story Plugin JAR
           path: build/libs/

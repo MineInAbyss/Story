@@ -1,6 +1,6 @@
-package io.github.paul1365972.metay
+package io.github.paul1365972.story
 
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.StoryDataStore
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Location
@@ -9,37 +9,37 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.inventory.ItemStack
 
-interface MetayService {
+interface StoryService {
 
-    companion object : @JvmStatic MetayService by Bukkit.getServer().servicesManager.load(MetayService::class.java)!!
+    companion object : @JvmStatic StoryService by Bukkit.getServer().servicesManager.load(StoryService::class.java)!!
 
     /**
      * The public data store for accessing block level data
      */
-    val blockStore: MetayDataStore<Location>
+    val blockStore: StoryDataStore<Location>
 
     /**
      * The public data store for accessing chunk level data
      */
-    val chunkStore: MetayDataStore<Chunk>
+    val chunkStore: StoryDataStore<Chunk>
 
     /**
      * The public data store for accessing world level data
      */
-    val worldStore: MetayDataStore<World>
+    val worldStore: StoryDataStore<World>
 
     /**
      * The public data store for accessing tile entity level data
      */
-    val tileEntityStore: MetayDataStore<Block>
+    val tileEntityStore: StoryDataStore<Block>
 
     /**
      * The public data store for accessing entity level data
      */
-    val entityStore: MetayDataStore<Entity>
+    val entityStore: StoryDataStore<Entity>
 
     /**
      * The public data store for accessing item level data
      */
-    val itemStore: MetayDataStore<ItemStack>
+    val itemStore: StoryDataStore<ItemStack>
 }

@@ -1,5 +1,5 @@
-import io.github.paul1365972.metay.datastore.DataKey;
-import io.github.paul1365972.metay.datastore.endpoints.MemoryDataStore;
+import io.github.paul1365972.story.datastore.DataKey;
+import io.github.paul1365972.story.datastore.endpoints.MemoryDataStore;
 import kotlin.Unit;
 import org.bukkit.Location;
 import org.junit.Test;

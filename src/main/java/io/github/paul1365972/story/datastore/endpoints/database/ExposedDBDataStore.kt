@@ -1,7 +1,7 @@
-package io.github.paul1365972.metay.datastore.endpoints.database
+package io.github.paul1365972.story.datastore.endpoints.database
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -11,7 +11,7 @@ class ExposedDBDataStore(
         tableName: String,
         keyColumn: String = "key",
         bytesColumn: String = "bytes"
-) : MetayDataStore<String> {
+) : StoryDataStore<String> {
 
     private val table = object : Table(tableName) {
         val key = varchar(keyColumn, length = 127)

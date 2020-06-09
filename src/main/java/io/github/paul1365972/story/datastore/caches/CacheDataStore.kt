@@ -1,13 +1,13 @@
-package io.github.paul1365972.metay.datastore.caches
+package io.github.paul1365972.story.datastore.caches
 
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
-import io.github.paul1365972.metay.datastore.filters.FilterDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.datastore.filters.FilterDataStore
 
 class CacheDataStore<L> @JvmOverloads constructor(
-        underlying: MetayDataStore<in L>,
+        underlying: StoryDataStore<in L>,
         val cacheSize: Int,
         val cacheKeyMapper: (L) -> Any? = { it }
 ) : FilterDataStore<L>(underlying) {

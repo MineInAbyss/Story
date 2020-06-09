@@ -1,9 +1,9 @@
-package io.github.paul1365972.metay.datastore.endpoints
+package io.github.paul1365972.story.datastore.endpoints
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
 
-open class MemoryDataStore<L> : MetayDataStore<L> {
+open class MemoryDataStore<L> : StoryDataStore<L> {
 
     protected val map = mutableMapOf<Pair<String, L>, ByteArray>()
 

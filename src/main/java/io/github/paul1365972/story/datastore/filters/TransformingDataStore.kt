@@ -1,12 +1,12 @@
-package io.github.paul1365972.metay.datastore.filters
+package io.github.paul1365972.story.datastore.filters
 
-import io.github.paul1365972.metay.datastore.DataKey
-import io.github.paul1365972.metay.datastore.MetayDataStore
+import io.github.paul1365972.story.datastore.DataKey
+import io.github.paul1365972.story.datastore.StoryDataStore
 
 open class TransformingDataStore<L, K>(
-        val underlying: MetayDataStore<in K>,
+        val underlying: StoryDataStore<in K>,
         val transformer: (L) -> K
-) : MetayDataStore<L> {
+) : StoryDataStore<L> {
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         return underlying.get(dataKey, transformer(locationKey))
     }

@@ -1,4 +1,4 @@
-package io.github.paul1365972.metay.datastore
+package io.github.paul1365972.story.datastore
 
 import kotlinx.io.ByteArrayOutputStream
 import kotlinx.serialization.KSerializer
