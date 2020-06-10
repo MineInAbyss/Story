@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.key.DataKey
 import io.github.paul1365972.story.util.SizedHashMap
 import java.io.*
 import java.util.*
@@ -27,7 +27,7 @@ class FileChunkedDataStore<L>(
         val chunk = chunks[chunkKey] ?: load(chunkKey)?.also { chunks[chunkKey] = it }
         return chunk?.let {
             it.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
-                dataKey.deserializer(datum)
+                dataKey.deserialize(datum)
             }
         }
     }
@@ -37,7 +37,7 @@ class FileChunkedDataStore<L>(
         val chunk = chunks.computeIfAbsent(chunkName) { k -> load(k) ?: Chunk() }
         chunk.dirty = true
         if (value != null) {
-            chunk.data[dataKey.namespacedName to transformer(locationKey)] = dataKey.serializer(value)
+            chunk.data[dataKey.namespacedName to transformer(locationKey)] = dataKey.serialize(value)
         } else {
             chunk.data.remove(dataKey.namespacedName to transformer(locationKey))
         }

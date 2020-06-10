@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.endpoints.MemoryDataStore
+import io.github.paul1365972.story.key.DataKey
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -18,12 +18,12 @@ class FolderDataStore<L>(
     }
 
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
-        return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserializer(it) }
+        return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserialize(it) }
     }
 
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
         if (value != null)
-            save(toFileName(dataKey, locationKey), dataKey.serializer(value))
+            save(toFileName(dataKey, locationKey), dataKey.serialize(value))
         else
             Files.deleteIfExists(File(folder, toFileName(dataKey, locationKey)).toPath())
     }

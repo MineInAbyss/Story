@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.wip
 
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.key.DataKey
 import java.sql.Connection
 
 class MySQLDataStore(
@@ -40,14 +40,14 @@ class MySQLDataStore(
         selectStatement.setString(1, toKey(dataKey, locationKey))
         val resultset = selectStatement.executeQuery()
         if (resultset.first())
-            return dataKey.deserializer(resultset.getBytes(1))
+            return dataKey.deserialize(resultset.getBytes(1))
         return null
     }
 
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: String, value: T?) {
         if (value != null) {
             selectStatement.setString(1, toKey(dataKey, locationKey))
-            selectStatement.setBytes(2, dataKey.serializer(value))
+            selectStatement.setBytes(2, dataKey.serialize(value))
             selectStatement.executeUpdate()
         } else {
             selectStatement.setString(1, toKey(dataKey, locationKey))
@@ -65,7 +65,7 @@ class MySQLDataStore(
     fun <T : Any> putBatch(data: Map<Pair<DataKey<T>, String>, T>) {
         data.forEach { (k, v) ->
             selectStatement.setString(1, toKey(k.first, k.second))
-            selectStatement.setBytes(2, k.first.serializer(v))
+            selectStatement.setBytes(2, k.first.serialize(v))
             selectStatement.addBatch()
         }
         selectStatement.executeBatch()

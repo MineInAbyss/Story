@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.filters
 
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.key.DataKey
 
 class NullableDataStore<L, K>(
         val underlying: StoryDataStore<K>,

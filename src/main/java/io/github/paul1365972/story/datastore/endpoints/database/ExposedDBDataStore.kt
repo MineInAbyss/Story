@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.database
 
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.key.DataKey
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -32,7 +32,7 @@ class ExposedDBDataStore(
             table.select {
                 table.key.eq(key)
             }.firstOrNull()?.let {
-                dataKey.deserializer(it[table.bytes].bytes)
+                dataKey.deserialize(it[table.bytes].bytes)
             }
         }
     }
@@ -43,7 +43,7 @@ class ExposedDBDataStore(
             transaction(database) {
                 table.replace {
                     it[table.key] = key
-                    it[table.bytes] = ExposedBlob(dataKey.serializer(value))
+                    it[table.bytes] = ExposedBlob(dataKey.serialize(value))
                 }
             }
         } else {

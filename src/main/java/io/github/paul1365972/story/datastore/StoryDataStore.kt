@@ -1,5 +1,6 @@
 package io.github.paul1365972.story.datastore
 
+import io.github.paul1365972.story.key.DataKey
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

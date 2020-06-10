@@ -2,9 +2,9 @@ package io.github.paul1365972.story.datastore.caches
 
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.filters.FilterDataStore
+import io.github.paul1365972.story.key.DataKey
 
 class CacheDataStore<L> @JvmOverloads constructor(
         underlying: StoryDataStore<in L>,
@@ -23,7 +23,7 @@ class CacheDataStore<L> @JvmOverloads constructor(
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         return cache.get(dataKey to cacheKeyMapper(locationKey)) {
             locationKey to underlying.get(dataKey, locationKey)
-        }?.let { dataKey.cloner(it as T) }
+        }?.let { dataKey.copy(it as T) }
     }
 
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {

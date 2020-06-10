@@ -2,9 +2,9 @@ package io.github.paul1365972.story.datastore.wip
 
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import io.github.paul1365972.story.datastore.DataKey
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.filters.FilterDataStore
+import io.github.paul1365972.story.key.DataKey
 
 class ProxyedDataStore<L> @JvmOverloads constructor(
         underlying: StoryDataStore<in L>,
