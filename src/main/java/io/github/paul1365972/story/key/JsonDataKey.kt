@@ -3,10 +3,10 @@ package io.github.paul1365972.story.key
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 
 open class JsonDataKey<T : Any> @JvmOverloads constructor(
-        plugin: JavaPlugin,
+        plugin: Plugin,
         name: String,
         private val serializer: KSerializer<T>,
         private val json: Json = Json(JsonConfiguration.Stable)

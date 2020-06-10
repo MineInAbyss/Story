@@ -1,10 +1,10 @@
 package io.github.paul1365972.story.key
 
 import org.bukkit.NamespacedKey
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 
 abstract class DataKey<T : Any>(
-        val plugin: JavaPlugin,
+        val plugin: Plugin,
         val name: String
 ) {
     val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)

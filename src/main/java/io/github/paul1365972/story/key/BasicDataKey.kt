@@ -1,9 +1,9 @@
 package io.github.paul1365972.story.key
 
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 
 class BasicDataKey<T : Any> @JvmOverloads constructor(
-        plugin: JavaPlugin,
+        plugin: Plugin,
         name: String,
         private val serializer: (T) -> ByteArray,
         private val deserializer: (ByteArray) -> T,
