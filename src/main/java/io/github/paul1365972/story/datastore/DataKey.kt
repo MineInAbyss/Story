@@ -3,6 +3,7 @@ package io.github.paul1365972.story.datastore
 import kotlinx.io.ByteArrayOutputStream
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.ByteArrayInputStream
@@ -15,11 +16,9 @@ class DataKey<T : Any> @JvmOverloads constructor(
         val name: String,
         val serializer: (T) -> ByteArray,
         val deserializer: (ByteArray) -> T,
-        cloner: ((T) -> T)? = null,
-        defaultValue: (() -> T?)? = null
+        cloner: ((T) -> T)? = null
 ) {
     val cloner: ((T) -> T) = cloner ?: { deserializer(serializer(it)) }
-    val defaultValue: (() -> T?) = defaultValue ?: { null }
 
     val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)
     val namespacedName: String = "${plugin.name}:$name"
@@ -28,16 +27,14 @@ class DataKey<T : Any> @JvmOverloads constructor(
     constructor(plugin: JavaPlugin,
                 name: String,
                 serializer: KSerializer<T>,
-                json: Json,
-                cloner: ((T) -> T)? = null,
-                defaultValue: (() -> T?)? = null
+                json: Json = Json(JsonConfiguration.Stable),
+                cloner: ((T) -> T)? = null
     ) : this(
             plugin,
             name,
             { obj -> json.stringify(serializer, obj).toByteArray() },
             { data -> json.parse(serializer, String(data)) },
-            cloner,
-            defaultValue
+            cloner
     )
 
     @JvmOverloads
@@ -45,8 +42,7 @@ class DataKey<T : Any> @JvmOverloads constructor(
                 name: String,
                 serializer: Serializer<T>,
                 deserializer: Deserializer<T>,
-                cloner: ((T) -> T)? = null,
-                defaultValue: (() -> T?)? = null
+                cloner: ((T) -> T)? = null
     ) : this(
             plugin,
             name,
@@ -64,8 +60,7 @@ class DataKey<T : Any> @JvmOverloads constructor(
                     }
                 }
             },
-            cloner,
-            defaultValue
+            cloner
     )
 
     override fun equals(other: Any?): Boolean {
