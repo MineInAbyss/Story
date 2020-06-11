@@ -7,7 +7,7 @@ abstract class DataKey<T : Any>(
         val plugin: Plugin,
         val name: String
 ) {
-    val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)
+    val namespacedKey: NamespacedKey by lazy { NamespacedKey(plugin, name) }
     val namespacedName: String = "${plugin.name}:$name"
 
     abstract fun serialize(value: T): ByteArray
