@@ -4,7 +4,7 @@ import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.key.DataKey
 
 abstract class FilterDataStore<L>(
-        val underlying: StoryDataStore<in L>
+        val underlying: StoryDataStore<L>
 ) : StoryDataStore<L> {
 
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {

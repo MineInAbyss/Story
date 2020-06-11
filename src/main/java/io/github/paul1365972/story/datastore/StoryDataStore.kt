@@ -4,7 +4,7 @@ import io.github.paul1365972.story.key.DataKey
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-interface StoryDataStore<L> {
+interface StoryDataStore<in L> {
 
     /**
      * Fetches the requested data and deserializes it.
@@ -23,8 +23,8 @@ interface StoryDataStore<L> {
      * @see [get]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T : Any> get(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T): T {
-        return get(dataKey, locationKey) ?: defaultValue(locationKey)
+    fun <T : Any> get(dataKey: DataKey<T>, locationKey: L, defaultValue: () -> T): T {
+        return get(dataKey, locationKey) ?: defaultValue()
     }
 
     /**
@@ -57,8 +57,8 @@ interface StoryDataStore<L> {
      * @see [compute]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: (T) -> T): T {
-        val modified = block(get(dataKey, locationKey) ?: defaultValue(locationKey))
+    fun <T : Any> compute(dataKey: DataKey<T>, locationKey: L, defaultValue: () -> T, block: (T) -> T): T {
+        val modified = block(get(dataKey, locationKey) ?: defaultValue())
         set(dataKey, locationKey, modified)
         return modified
     }
@@ -85,8 +85,8 @@ interface StoryDataStore<L> {
      * @see [update]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: DataSetter<T>.(T) -> Unit): T {
-        val modified = DataSetter(get(dataKey, locationKey) ?: defaultValue(locationKey))
+    fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, defaultValue: () -> T, block: DataSetter<T>.(T) -> Unit): T {
+        val modified = DataSetter(get(dataKey, locationKey) ?: defaultValue())
         block(modified, modified.get())
         if (modified.hasChanged())
             set(dataKey, locationKey, modified.get())
@@ -113,8 +113,8 @@ interface StoryDataStore<L> {
      * @see [modify]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun <T : Any> modify(dataKey: DataKey<T>, locationKey: L, defaultValue: (L) -> T, block: T.() -> Unit): T {
-        return (get(dataKey, locationKey) ?: defaultValue(locationKey)).apply {
+    fun <T : Any> modify(dataKey: DataKey<T>, locationKey: L, defaultValue: () -> T, block: T.() -> Unit): T {
+        return (get(dataKey, locationKey) ?: defaultValue()).apply {
             block(this)
             set(dataKey, locationKey, this)
         }

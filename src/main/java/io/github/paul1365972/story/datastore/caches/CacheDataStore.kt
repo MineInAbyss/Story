@@ -9,7 +9,7 @@ import io.github.paul1365972.story.key.DataKey
 import java.util.concurrent.ExecutionException
 
 class CacheDataStore<L> @JvmOverloads constructor(
-        underlying: StoryDataStore<in L>,
+        underlying: StoryDataStore<L>,
         val cacheSize: Int,
         val cacheKeyMapper: (L) -> Any? = { it },
         val copyFresh: Boolean = true
