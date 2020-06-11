@@ -20,8 +20,8 @@ class CacheDataStore<L> @JvmOverloads constructor(
             .removalListener<Pair<DataKey<*>, LocationWrapper<L>>, Any?> {
                 underlying.set(it.key.first as DataKey<Any>, it.key.second.location, it.value)
             }.build(object : CacheLoader<Pair<DataKey<*>, LocationWrapper<L>>, Any?>() {
-                override fun load(key: Pair<DataKey<*>, LocationWrapper<L>>): Any? {
-                    return underlying.get(key.first, key.second.location)
+                override fun load(key: Pair<DataKey<*>, LocationWrapper<L>>): Any {
+                    return underlying.get(key.first, key.second.location) ?: throw NullPointerException()
                 }
             })
 
