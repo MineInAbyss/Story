@@ -19,27 +19,30 @@ import java.io.File
 import io.github.paul1365972.story.util.MCDataStoreUtil as MC
 
 class Story : JavaPlugin(), StoryService {
-    // TODO Estimate good cache sizes
+    companion object Config {
+        private const val PLAYERS = 128
+        private const val COMPONENTS = 32
+    }
 
-    // Chunk cache size of 1024 seems reasonable if we expect each player to interact with 5 chunks at a time
-    // Cache size just guesstimated, as i am still not sure how this will be used
+    // 1_024 total (8 ~ 3x3 chunks), at 100 byte/component (and 128 special blocks/chunk) about 400 MB
+    // 524_288 total
     override val blockStore: StoryDataStore<Location> by registerLazy {
         CacheDataStore<Location>(
-                FileChunkedDataStore(File(dataFolder, "block"), 256, MC::toChunkKey, MC::toBlockKey),
-                1024, MC::toBlockKey
+                FileChunkedDataStore(File(dataFolder, "block"), PLAYERS * 8, MC::toChunkKey, MC::toBlockKey),
+                PLAYERS * 128 * COMPONENTS, MC::toBlockKey
         )
     }
 
-    // We load max 512 super chunks at a time, just guessing
-    // 10x10 view distance at 50 plays leads to 5000 chunks, so we cache about double that amount
+    // 1_024 total (8 ~ 3x3 super chunks), at 100 byte/component (16^2 chunks/superchunk is a given) about 800 MB
+    // 1_048_576 total (256 ~ 15x15 view distance)
     override val chunkStore: StoryDataStore<Chunk> by registerLazy {
         CacheDataStore<Chunk>(
-                FileChunkedDataStore(File(dataFolder, "chunk"), 512, MC::toSuperChunkKey, MC::toChunkKey),
-                8192, MC::toChunkKey
+                FileChunkedDataStore(File(dataFolder, "chunk"), PLAYERS * 8, MC::toSuperChunkKey, MC::toChunkKey),
+                PLAYERS * 256 * COMPONENTS, MC::toChunkKey
         )
     }
 
-    // We wont have more than 128 worlds
+    // 128 total, we wont have more worlds
     override val worldStore: StoryDataStore<World> by registerLazy {
         CacheDataStore<World>(
                 FolderDataStore(File(dataFolder, "world"), MC::toWorldKey),
@@ -47,28 +50,28 @@ class Story : JavaPlugin(), StoryService {
         )
     }
 
-    // Not sure how this will be used either, so just going with 50 player with 20 blocks each seems reasonable
+    // 262_144 total
     override val tileEntityStore: StoryDataStore<Block> by registerLazy {
         CacheDataStore<Block>(
                 NullableDataStore(PDCDataStore(), { it.state as? PersistentDataHolder }),
-                1024, { it }
+                PLAYERS * 64 * COMPONENTS, { it }
         )
     }
 
     // Do we need to make the entity object the key ("identity" keys) or the uuid?
-    // Cache size just guesstimated, 50 players with ~100 mobs each expected
+    // 524_288 total (more components expected)
     override val entityStore: StoryDataStore<Entity> by registerLazy {
         CacheDataStore<Entity>(
                 PDCDataStore(),
-                8124, { it.uniqueId }
+                PLAYERS * 128 * COMPONENTS, { it.uniqueId }
         )
     }
 
-    // 4096 should be enough when we expect ~50 players with their inventories
+    // 524_288 total (less components expected)
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
-                4096
+                PLAYERS * 128 * COMPONENTS
         )
     }
 

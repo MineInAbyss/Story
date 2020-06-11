@@ -12,7 +12,7 @@
 - [ ] Removing a world won't clean up the worlds data
 
 ### Improvements
-- [ ] Adjust cache sizes for all public data stores (1/2)
-- [ ] Add config for caches
+- [x] Adjust cache sizes for all public data stores (2/2)
+- [ ] Add config for caches (1/2)
 - [x] Maybe move from paper to spigot
 - [ ] Improve Exposed MySQL Endpoint
