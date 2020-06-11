@@ -20,4 +20,6 @@ open class MemoryDataStore<L> : StoryDataStore<L> {
         else
             map.remove(dataKey.namespacedName to locationKey)
     }
+
+    override fun close() = map.clear()
 }

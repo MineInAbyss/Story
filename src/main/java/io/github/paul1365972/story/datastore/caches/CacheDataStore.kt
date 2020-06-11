@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.filters.FilterDataStore
 import io.github.paul1365972.story.key.DataKey
+import java.util.concurrent.ExecutionException
 
 class CacheDataStore<L> @JvmOverloads constructor(
         underlying: StoryDataStore<in L>,
@@ -26,7 +27,13 @@ class CacheDataStore<L> @JvmOverloads constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
-        return cache.get(dataKey to LocationWrapper(locationKey, cacheKeyMapper))?.let { dataKey.copy(it as T) }
+        val key = dataKey to LocationWrapper(locationKey, cacheKeyMapper)
+        val value = try {
+            cache.get(key)
+        } catch (e: ExecutionException) {
+            null
+        }
+        return value?.let { dataKey.copy(it as T) }
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -39,7 +46,7 @@ class CacheDataStore<L> @JvmOverloads constructor(
         super.close()
     }
 
-    class LocationWrapper<L>(
+    protected class LocationWrapper<L>(
             val location: L,
             val key: Any?
     ) {
