@@ -16,3 +16,4 @@
 - [ ] Add config for caches (1/2)
 - [x] Maybe move from paper to spigot
 - [ ] Improve Exposed MySQL Endpoint
+- [ ] Only clean cache after tick

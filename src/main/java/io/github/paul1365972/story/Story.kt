@@ -29,7 +29,7 @@ class Story : JavaPlugin(), StoryService {
     override val blockStore: StoryDataStore<Location> by registerLazy {
         CacheDataStore<Location>(
                 FileChunkedDataStore(File(dataFolder, "block"), PLAYERS * 8, MC::toChunkKey, MC::toBlockKey),
-                PLAYERS * 128 * COMPONENTS, MC::toBlockKey
+                PLAYERS * 128 * COMPONENTS, MC::toBlockKey, copyFresh = false
         )
     }
 
@@ -38,7 +38,7 @@ class Story : JavaPlugin(), StoryService {
     override val chunkStore: StoryDataStore<Chunk> by registerLazy {
         CacheDataStore<Chunk>(
                 FileChunkedDataStore(File(dataFolder, "chunk"), PLAYERS * 8, MC::toSuperChunkKey, MC::toChunkKey),
-                PLAYERS * 256 * COMPONENTS, MC::toChunkKey
+                PLAYERS * 256 * COMPONENTS, MC::toChunkKey, copyFresh = false
         )
     }
 
@@ -46,7 +46,7 @@ class Story : JavaPlugin(), StoryService {
     override val worldStore: StoryDataStore<World> by registerLazy {
         CacheDataStore<World>(
                 FolderDataStore(File(dataFolder, "world"), MC::toWorldKey),
-                128, World::getUID
+                128, World::getUID, copyFresh = false
         )
     }
 
@@ -54,7 +54,7 @@ class Story : JavaPlugin(), StoryService {
     override val tileEntityStore: StoryDataStore<Block> by registerLazy {
         CacheDataStore<Block>(
                 NullableDataStore(PDCDataStore(), { it.state as? PersistentDataHolder }),
-                PLAYERS * 64 * COMPONENTS, { it }
+                PLAYERS * 64 * COMPONENTS, { it }, copyFresh = false
         )
     }
 
@@ -63,7 +63,7 @@ class Story : JavaPlugin(), StoryService {
     override val entityStore: StoryDataStore<Entity> by registerLazy {
         CacheDataStore<Entity>(
                 PDCDataStore(),
-                PLAYERS * 128 * COMPONENTS, { it.uniqueId }
+                PLAYERS * 128 * COMPONENTS, { it.uniqueId }, copyFresh = false
         )
     }
 
@@ -71,7 +71,7 @@ class Story : JavaPlugin(), StoryService {
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
-                PLAYERS * 128 * COMPONENTS
+                PLAYERS * 128 * COMPONENTS, copyFresh = false
         )
     }
 

@@ -11,7 +11,8 @@ import java.util.concurrent.ExecutionException
 class CacheDataStore<L> @JvmOverloads constructor(
         underlying: StoryDataStore<in L>,
         val cacheSize: Int,
-        val cacheKeyMapper: (L) -> Any? = { it }
+        val cacheKeyMapper: (L) -> Any? = { it },
+        val copyFresh: Boolean = true
 ) : FilterDataStore<L>(underlying) {
 
     @Suppress("UNCHECKED_CAST")
@@ -33,7 +34,10 @@ class CacheDataStore<L> @JvmOverloads constructor(
         } catch (e: ExecutionException) {
             null
         }
-        return value?.let { dataKey.copy(it as T) }
+        return if (copyFresh)
+            value?.let { dataKey.copy(it as T) }
+        else
+            value as T?
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
