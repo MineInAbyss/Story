@@ -9,10 +9,10 @@ import io.github.paul1365972.story.datastore.filters.NullableDataStore
 import org.bukkit.Chunk
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.block.Block
+import org.bukkit.block.BlockState
+import org.bukkit.block.TileState
 import org.bukkit.entity.Entity
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -51,9 +51,9 @@ class Story : JavaPlugin(), StoryService {
     }
 
     // 262_144 total
-    override val tileEntityStore: StoryDataStore<Block> by registerLazy {
-        CacheDataStore<Block>(
-                NullableDataStore(PDCDataStore(), { it.state as? PersistentDataHolder }),
+    override val tileEntityStore: StoryDataStore<BlockState> by registerLazy {
+        CacheDataStore<BlockState>(
+                NullableDataStore(PDCDataStore(), { it as? TileState }),
                 PLAYERS * 64 * COMPONENTS, { it }, copyFresh = false
         )
     }
