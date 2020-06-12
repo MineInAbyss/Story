@@ -24,6 +24,8 @@ class Story : JavaPlugin(), StoryService {
         private const val COMPONENTS = 32
     }
 
+    private val activeDataStores = mutableListOf<Lazy<StoryDataStore<*>>>()
+
     // 1_024 total (8 ~ 3x3 chunks), at 100 byte/component (and 128 special blocks/chunk) about 400 MB
     // 524_288 total
     override val blockStore: StoryDataStore<Location> by registerLazy {
@@ -71,11 +73,9 @@ class Story : JavaPlugin(), StoryService {
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
-                PLAYERS * 128 * COMPONENTS, copyFresh = false
+                PLAYERS * 128 * COMPONENTS, { it.itemMeta?.persistentDataContainer }, copyFresh = false
         )
     }
-
-    private val activeDataStores = mutableListOf<Lazy<StoryDataStore<*>>>()
 
     override fun onLoad() {
         server.servicesManager.register(StoryService::class.java, this, this, ServicePriority.Normal)
