@@ -3,6 +3,7 @@ package io.github.paul1365972.story.datastore.caches
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
+import com.google.common.cache.RemovalCause
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.filters.FilterDataStore
 import io.github.paul1365972.story.key.DataKey
@@ -12,17 +13,19 @@ class CacheDataStore<L> @JvmOverloads constructor(
         underlying: StoryDataStore<L>,
         val cacheSize: Int,
         val cacheKeyMapper: (L) -> Any? = { it },
-        val copyFresh: Boolean = true
+        val copyFresh: Boolean = true,
+        val writeThrough: Boolean = true
 ) : FilterDataStore<L>(underlying) {
 
     @Suppress("UNCHECKED_CAST")
-    private val cache: LoadingCache<Pair<DataKey<*>, LocationWrapper<L>>, Any?> = CacheBuilder.newBuilder()
+    private val cache: LoadingCache<Pair<DataKey<*>, LocationWrapper<L>>, ValueWrapper<Any?>> = CacheBuilder.newBuilder()
             .maximumSize(cacheSize.toLong())
-            .removalListener<Pair<DataKey<*>, LocationWrapper<L>>, Any?> {
-                underlying.set(it.key.first as DataKey<Any>, it.key.second.location, it.value)
-            }.build(object : CacheLoader<Pair<DataKey<*>, LocationWrapper<L>>, Any?>() {
-                override fun load(key: Pair<DataKey<*>, LocationWrapper<L>>): Any {
-                    return underlying.get(key.first, key.second.location) ?: throw Exception()
+            .removalListener<Pair<DataKey<*>, LocationWrapper<L>>, ValueWrapper<Any?>> {
+                if (it.cause != RemovalCause.REPLACED && it.value.dirty)
+                    underlying.set(it.key.first as DataKey<Any>, it.key.second.location, it.value.value)
+            }.build(object : CacheLoader<Pair<DataKey<*>, LocationWrapper<L>>, ValueWrapper<Any?>>() {
+                override fun load(key: Pair<DataKey<*>, LocationWrapper<L>>): ValueWrapper<Any?> {
+                    return underlying.get(key.first, key.second.location)?.let { ValueWrapper(it) } ?: throw Exception()
                 }
             })
 
@@ -42,7 +45,9 @@ class CacheDataStore<L> @JvmOverloads constructor(
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
-        cache.put(dataKey to LocationWrapper(locationKey, cacheKeyMapper), value)
+        cache.put(dataKey to LocationWrapper(locationKey, cacheKeyMapper), ValueWrapper(value, !writeThrough))
+        if (writeThrough)
+            underlying.set(dataKey, locationKey, value)
     }
 
     override fun close() {
@@ -68,4 +73,9 @@ class CacheDataStore<L> @JvmOverloads constructor(
             return key?.hashCode() ?: 0
         }
     }
+
+    protected data class ValueWrapper<out T>(
+            val value: T,
+            var dirty: Boolean = false
+    )
 }

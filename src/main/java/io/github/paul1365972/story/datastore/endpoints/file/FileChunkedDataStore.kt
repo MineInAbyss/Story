@@ -3,6 +3,7 @@ package io.github.paul1365972.story.datastore.endpoints.file
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
+import com.google.common.cache.RemovalCause
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.key.DataKey
 import java.io.*
@@ -28,16 +29,17 @@ class FileChunkedDataStore<L>(
     private val cache: LoadingCache<String, Chunk<String>> = CacheBuilder.newBuilder()
             .maximumSize(chunkCacheSize.toLong())
             .removalListener<String, Chunk<String>> {
-                if (!it.value.dirty) return@removalListener
-                val fileName = Base64.getUrlEncoder().encodeToString(it.key.toByteArray())
-                val file = File(folder, fileName)
-                DataOutputStream(ZipOutputStream(FileOutputStream(file))).use { dos ->
-                    dos.writeInt(it.value.data.size)
-                    it.value.data.forEach { (k, v) ->
-                        dos.writeUTF(k.first)
-                        dos.writeUTF(k.second)
-                        dos.writeInt(v.size)
-                        dos.write(v)
+                if (it.cause != RemovalCause.REPLACED && it.value.dirty) {
+                    val fileName = Base64.getUrlEncoder().encodeToString(it.key.toByteArray())
+                    val file = File(folder, fileName)
+                    DataOutputStream(ZipOutputStream(FileOutputStream(file))).use { dos ->
+                        dos.writeInt(it.value.data.size)
+                        it.value.data.forEach { (k, v) ->
+                            dos.writeUTF(k.first)
+                            dos.writeUTF(k.second)
+                            dos.writeInt(v.size)
+                            dos.write(v)
+                        }
                     }
                 }
             }.build(object : CacheLoader<String, Chunk<String>>() {

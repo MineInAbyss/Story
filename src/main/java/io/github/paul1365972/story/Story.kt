@@ -2,6 +2,7 @@ package io.github.paul1365972.story
 
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.caches.CacheDataStore
+import io.github.paul1365972.story.datastore.caches.IdentityKey
 import io.github.paul1365972.story.datastore.endpoints.file.FileChunkedDataStore
 import io.github.paul1365972.story.datastore.endpoints.file.FolderDataStore
 import io.github.paul1365972.story.datastore.endpoints.mc.PDCDataStore
@@ -73,7 +74,7 @@ class Story : JavaPlugin(), StoryService {
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 NullableDataStore(PDCDataStore(), { it.itemMeta }),
-                PLAYERS * 128 * COMPONENTS, { it.itemMeta?.persistentDataContainer }, copyFresh = false
+                PLAYERS * 128 * COMPONENTS, { IdentityKey(it) }, copyFresh = false, writeThrough = true
         )
     }
 
