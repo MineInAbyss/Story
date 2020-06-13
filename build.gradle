@@ -64,6 +64,9 @@ dependencies {
     implementation "org.jetbrains.exposed:exposed-jdbc:$exposedVersion"
 
     implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.github.ben-manes.caffeine:caffeine:$caffeineVersion"
+    implementation "org.cache2k:cache2k-api:${cache2kVersion}"
+    runtimeOnly "org.cache2k:cache2k-core:${cache2kVersion}"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testImplementation "org.spigotmc:spigot-api:$serverVersion"

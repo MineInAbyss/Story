@@ -4,6 +4,7 @@
 - [x] Remove tests in favor of documentation
 - [x] Remove development hack, make datakey's javaplugin non-nullable
 - [x] Check lazy init to not load&save on disable
+- [ ] Caching for items
 
 ### Additions
 - [ ] Properly implement Java MySQL Endpoint !!!
@@ -17,3 +18,4 @@
 - [x] Maybe move from paper to spigot
 - [ ] Improve Exposed MySQL Endpoint
 - [ ] Only clean cache after tick
+- [ ] Try other caching libraries like caffeine or cache2k
