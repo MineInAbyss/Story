@@ -5,6 +5,7 @@ import io.github.paul1365972.story.datastore.caches.CacheDataStore
 import io.github.paul1365972.story.datastore.caches.IdentityKey
 import io.github.paul1365972.story.datastore.endpoints.file.FileChunkedDataStore
 import io.github.paul1365972.story.datastore.endpoints.file.FolderDataStore
+import io.github.paul1365972.story.datastore.endpoints.mc.ItemStackDataStore
 import io.github.paul1365972.story.datastore.endpoints.mc.PDCDataStore
 import io.github.paul1365972.story.datastore.filters.NullableDataStore
 import org.bukkit.Chunk
@@ -73,7 +74,7 @@ class Story : JavaPlugin(), StoryService {
     // 524_288 total (less components expected)
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
-                NullableDataStore(PDCDataStore(), { it.itemMeta }),
+                ItemStackDataStore(),
                 PLAYERS * 128 * COMPONENTS, { IdentityKey(it) }, copyFresh = false, writeThrough = true
         )
     }

@@ -8,6 +8,8 @@ class IdentityKey<T>(
     }
 
     override fun hashCode(): Int {
-        return ref?.hashCode() ?: 0
+        return System.identityHashCode(ref)
     }
+
+    //override fun toString() = "IdentityKey(ref=$ref)"
 }
