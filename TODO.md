@@ -4,7 +4,8 @@
 - [x] Remove tests in favor of documentation
 - [x] Remove development hack, make datakey's javaplugin non-nullable
 - [x] Check lazy init to not load&save on disable
-- [ ] Caching for items
+- [x] Caching for items
+- [ ] Update TODO and Documentation (Especially for items etc.)
 
 ### Additions
 - [ ] Properly implement Java MySQL Endpoint !!!
