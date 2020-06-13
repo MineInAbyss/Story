@@ -7,7 +7,6 @@ import com.google.common.cache.RemovalCause
 import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.datastore.filters.FilterDataStore
 import io.github.paul1365972.story.key.DataKey
-import org.bukkit.inventory.ItemStack
 import java.util.concurrent.ExecutionException
 
 class CacheDataStore<L> @JvmOverloads constructor(
@@ -34,11 +33,6 @@ class CacheDataStore<L> @JvmOverloads constructor(
 
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
         val key = dataKey to LocationWrapper(locationKey, cacheKeyMapper)
-        println("Key: $key")
-        println("Loc: (${(locationKey as Any).javaClass}) $locationKey")
-        println("CacheLocKey: ${cacheKeyMapper(locationKey)}")
-        println("DataContainer: ${(locationKey as ItemStack).itemMeta?.persistentDataContainer}")
-
         val value = try {
             @Suppress("UNCHECKED_CAST")
             cache.get(key)?.value as T?
