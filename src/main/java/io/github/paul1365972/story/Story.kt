@@ -57,7 +57,7 @@ class Story : JavaPlugin(), StoryService {
     override val tileEntityStore: StoryDataStore<BlockState> by registerLazy {
         CacheDataStore<BlockState>(
                 NullableDataStore(PDCDataStore(), { it as? TileState }),
-                PLAYERS * 64 * COMPONENTS, { it }, copyFresh = false
+                PLAYERS * 64 * COMPONENTS, { it }, copyFresh = true
         )
     }
 
@@ -66,7 +66,7 @@ class Story : JavaPlugin(), StoryService {
     override val entityStore: StoryDataStore<Entity> by registerLazy {
         CacheDataStore<Entity>(
                 PDCDataStore(),
-                PLAYERS * 128 * COMPONENTS, { it.uniqueId }, copyFresh = false
+                PLAYERS * 128 * COMPONENTS, { it.uniqueId }, copyFresh = true
         )
     }
 
@@ -74,7 +74,8 @@ class Story : JavaPlugin(), StoryService {
     override val itemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 ItemStackDataStore(),
-                PLAYERS * 128 * COMPONENTS, { it.itemMeta?.persistentDataContainer }, copyFresh = false, writeThrough = true
+                PLAYERS * 128 * COMPONENTS, { it.itemMeta?.persistentDataContainer },
+                copyFresh = true, writeThrough = true
         )
     }
 
