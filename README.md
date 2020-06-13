@@ -1,4 +1,7 @@
 # Story
+
+[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
+
 Basic Spigot plugin for attaching custom data to: 
 - Worlds
 - Chunks

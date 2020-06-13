@@ -19,9 +19,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         id: build
-        run: ./gradlew jar shadowJar
+        run: ./gradlew build shadowJar
       - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: Story Plugin JAR
+          name: Story Plugin JARs
           path: build/libs/
