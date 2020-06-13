@@ -7,7 +7,7 @@ import io.github.paul1365972.story.datastore.filters.FilterDataStore
 import io.github.paul1365972.story.key.DataKey
 
 class ProxyedDataStore<L> @JvmOverloads constructor(
-        underlying: StoryDataStore<in L>,
+        underlying: StoryDataStore<L>,
         val cacheKeyMapper: (L) -> Any? = { it }
 ) : FilterDataStore<L>(underlying) {
 

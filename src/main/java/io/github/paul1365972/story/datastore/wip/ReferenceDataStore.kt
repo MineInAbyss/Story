@@ -8,7 +8,7 @@ import io.github.paul1365972.story.key.DataKey
 import java.lang.ref.WeakReference
 
 class ReferenceDataStore<L>(
-        underlying: StoryDataStore<in L>,
+        underlying: StoryDataStore<L>,
         val cacheKeyMapper: (L) -> Any? = { it }
 ) : FilterDataStore<L>(underlying) {
 
