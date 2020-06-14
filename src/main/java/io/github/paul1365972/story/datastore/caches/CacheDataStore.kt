@@ -44,9 +44,9 @@ class CacheDataStore<L> @JvmOverloads constructor(
 
 
     override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
-        cache.put(dataKey to LocationWrapper(locationKey, cacheKeyMapper), ValueWrapper(value, !writeThrough))
         if (writeThrough)
             underlying.set(dataKey, locationKey, value)
+        cache.put(dataKey to LocationWrapper(locationKey, cacheKeyMapper), ValueWrapper(value, !writeThrough))
     }
 
     override fun close() {

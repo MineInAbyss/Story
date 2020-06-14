@@ -31,7 +31,7 @@ val magicKey = DataKey(plugin, "magic", MagicData.serializer(), Json(JsonConfigu
 
 Next acquire a story service instance via the JavaPlugin 
 ```kotlin
-val service: StoryService = server.servicesManager.load(StoryService.class);
+val service: StoryService = server.servicesManager.load(StoryService.class)
 ```
 
 Or use e.g. `StoryService.entityStore` directly
@@ -40,7 +40,7 @@ Now with an entity and the data key you can attach, get, modify and update the d
 ```kotlin
 val value = service.entityStore.get(magicKey, entity)
 
-service.entityStore.put(magicKey, entity, value)
+service.entityStore.set(magicKey, entity, value)
 
 service.entityStore.compute(magicKey, entity) {
     val value = it ?: MagicData(0, "lorem")
@@ -75,10 +75,10 @@ loc.magicData = (loc.magicData ?: MagicData(0, "lorem")).apply {
 You can also create custom data stores in case the predefined ones are lacking.
 
 ```kotlin
-itemStore = new CacheDataStore<>(
-        new TransformingDataStore<>(
-        new PDCDataStore(), ItemStack::getItemMeta),
-        cacheSize = 4096)
+val entityStore: StoryDataStore<Entity> = 
+        CacheDataStore<Entity>(PDCDataStore(), 
+            4096, { it.uniqueId }
+        )
 ```
 
-Also remember to close the data store `itemStore.close()`
+Also remember to close the data store `onDisable()` with `itemStore.close()`
