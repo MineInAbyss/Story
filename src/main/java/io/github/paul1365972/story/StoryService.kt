@@ -16,30 +16,30 @@ interface StoryService {
     /**
      * The public data store for accessing block level data
      */
-    val blockStore: StoryDataStore<Location>
+    val defaultBlockStore: StoryDataStore<Location>
 
     /**
      * The public data store for accessing chunk level data
      */
-    val chunkStore: StoryDataStore<Chunk>
+    val defaultChunkStore: StoryDataStore<Chunk>
 
     /**
      * The public data store for accessing world level data
      */
-    val worldStore: StoryDataStore<World>
+    val defaultWorldStore: StoryDataStore<World>
 
     /**
      * The public data store for accessing tile entity level data
      */
-    val tileEntityStore: StoryDataStore<BlockState>
+    val defaultTileEntityStore: StoryDataStore<BlockState>
 
     /**
      * The public data store for accessing entity level data
      */
-    val entityStore: StoryDataStore<Entity>
+    val defaultEntityStore: StoryDataStore<Entity>
 
     /**
      * The public data store for accessing item level data
      */
-    val itemStore: StoryDataStore<ItemStack>
+    val defaultItemStore: StoryDataStore<ItemStack>
 }

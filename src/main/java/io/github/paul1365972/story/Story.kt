@@ -29,7 +29,7 @@ class Story : JavaPlugin(), StoryService {
 
     // 1_024 total (8 ~ 3x3 chunks), at 100 byte/component (and 128 special blocks/chunk) about 400 MB
     // 524_288 total
-    override val blockStore: StoryDataStore<Location> by registerLazy {
+    override val defaultBlockStore: StoryDataStore<Location> by registerLazy {
         CacheDataStore<Location>(
                 FileChunkedDataStore(File(dataFolder, "block"), PLAYERS * 8, MC::toChunkKey, MC::toBlockKey),
                 PLAYERS * 128 * COMPONENTS, MC::toBlockKey, copyFresh = false
@@ -38,7 +38,7 @@ class Story : JavaPlugin(), StoryService {
 
     // 1_024 total (8 ~ 3x3 super chunks), at 100 byte/component (16^2 chunks/superchunk is a given) about 800 MB
     // 1_048_576 total (256 ~ 15x15 view distance)
-    override val chunkStore: StoryDataStore<Chunk> by registerLazy {
+    override val defaultChunkStore: StoryDataStore<Chunk> by registerLazy {
         CacheDataStore<Chunk>(
                 FileChunkedDataStore(File(dataFolder, "chunk"), PLAYERS * 8, MC::toSuperChunkKey, MC::toChunkKey),
                 PLAYERS * 256 * COMPONENTS, MC::toChunkKey, copyFresh = false
@@ -46,7 +46,7 @@ class Story : JavaPlugin(), StoryService {
     }
 
     // 128 total, we wont have more worlds
-    override val worldStore: StoryDataStore<World> by registerLazy {
+    override val defaultWorldStore: StoryDataStore<World> by registerLazy {
         CacheDataStore<World>(
                 FolderDataStore(File(dataFolder, "world"), MC::toWorldKey),
                 128, World::getUID, copyFresh = false
@@ -54,7 +54,7 @@ class Story : JavaPlugin(), StoryService {
     }
 
     // 262_144 total
-    override val tileEntityStore: StoryDataStore<BlockState> by registerLazy {
+    override val defaultTileEntityStore: StoryDataStore<BlockState> by registerLazy {
         CacheDataStore<BlockState>(
                 NullableDataStore(PDCDataStore(), { it as? TileState }),
                 PLAYERS * 64 * COMPONENTS, { it }, copyFresh = true
@@ -63,7 +63,7 @@ class Story : JavaPlugin(), StoryService {
 
     // Do we need to make the entity object the key ("identity" keys) or the uuid?
     // 524_288 total (more components expected)
-    override val entityStore: StoryDataStore<Entity> by registerLazy {
+    override val defaultEntityStore: StoryDataStore<Entity> by registerLazy {
         CacheDataStore<Entity>(
                 PDCDataStore(),
                 PLAYERS * 128 * COMPONENTS, { it.uniqueId }, copyFresh = true
@@ -71,7 +71,7 @@ class Story : JavaPlugin(), StoryService {
     }
 
     // 524_288 total (less components expected)
-    override val itemStore: StoryDataStore<ItemStack> by registerLazy {
+    override val defaultItemStore: StoryDataStore<ItemStack> by registerLazy {
         CacheDataStore<ItemStack>(
                 ItemStackDataStore(),
                 PLAYERS * 128 * COMPONENTS, { it.itemMeta?.persistentDataContainer },
