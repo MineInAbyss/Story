@@ -7,8 +7,8 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 class InstanceAccess<T : Any, L>(
-        val dataKey: DataKey<T>,
         val dataStore: StoryDataStore<L>,
+        val dataKey: DataKey<T>,
         val locationKey: L
 ) {
 

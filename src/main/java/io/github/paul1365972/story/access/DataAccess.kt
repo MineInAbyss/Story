@@ -4,8 +4,8 @@ import io.github.paul1365972.story.datastore.StoryDataStore
 import io.github.paul1365972.story.key.DataKey
 
 class DataAccess<T : Any, in L>(
-        val dataKey: DataKey<T>,
-        val dataStore: StoryDataStore<L>
+        val dataStore: StoryDataStore<L>,
+        val dataKey: DataKey<T>
 ) : DataAccessI<T, L> {
     override fun get(locationKey: L): T? = dataStore.get(dataKey, locationKey)
 
