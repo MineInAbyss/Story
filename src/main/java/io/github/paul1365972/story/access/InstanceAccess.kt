@@ -127,11 +127,9 @@ class InstanceAccess<T : Any, L>(
      * Provides a delegate to the value.
      * Note: Be careful as the value is only [set] when assigning the value, only modifying its properties does not
      *
-     * @param locationKey Location of the value
-     *
      * @return The value delegate
      */
-    fun access(locationKey: L): ReadWriteProperty<Any?, T?> {
+    fun access(): ReadWriteProperty<Any?, T?> {
         return object : ReadWriteProperty<Any?, T?> {
             override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
                 return get()
