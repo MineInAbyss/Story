@@ -35,7 +35,7 @@ class InstanceAccess<T : Any, L>(
      * @see [get]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun get(defaultValue: () -> T): T {
+    inline fun get(defaultValue: () -> T): T {
         return get() ?: defaultValue()
     }
 
@@ -48,7 +48,7 @@ class InstanceAccess<T : Any, L>(
      *
      * @return The computed value
      */
-    fun compute(block: (T?) -> T?): T? {
+    inline fun compute(block: (T?) -> T?): T? {
         val modified = block(get())
         set(modified)
         return modified
@@ -58,7 +58,7 @@ class InstanceAccess<T : Any, L>(
      * @see [compute]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun compute(defaultValue: () -> T, block: (T) -> T): T {
+    inline fun compute(defaultValue: () -> T, block: (T) -> T): T {
         val modified = block(get() ?: defaultValue())
         set(modified)
         return modified
@@ -72,24 +72,30 @@ class InstanceAccess<T : Any, L>(
      *
      * @return The updated value
      */
-    fun update(block: DataSetter<T?>.(T?) -> Unit): T? {
+    inline fun update(block: DataSetter<T?>.(T?) -> Unit): T? {
         val modified = DataSetter(get())
-        block(modified, modified.get())
-        if (modified.hasChanged())
-            set(modified.get())
-        return modified.get()
+        try {
+            block(modified, modified._get())
+            return modified._get()
+        } finally {
+            if (modified.hasChanged())
+                set(modified._get())
+        }
     }
 
     /**
      * @see [update]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun update(defaultValue: () -> T, block: DataSetter<T>.(T) -> Unit): T {
+    inline fun update(defaultValue: () -> T, block: DataSetter<T>.(T) -> Unit): T {
         val modified = DataSetter(get() ?: defaultValue())
-        block(modified, modified.get())
-        if (modified.hasChanged())
-            set(modified.get())
-        return modified.get()
+        try {
+            block(modified, modified._get())
+            return modified._get()
+        } finally {
+            if (modified.hasChanged())
+                set(modified._get())
+        }
     }
 
     /**
@@ -99,7 +105,7 @@ class InstanceAccess<T : Any, L>(
      *
      * @return The modified value
      */
-    fun modify(block: T.() -> Unit): T? {
+    inline fun modify(block: T.() -> Unit): T? {
         return get()?.apply {
             block(this)
             set(this)
@@ -110,7 +116,7 @@ class InstanceAccess<T : Any, L>(
      * @see [modify]
      * Uses the deserialized value or the default value, if the value is null or the data is missing
      */
-    fun modify(defaultValue: () -> T, block: T.() -> Unit): T {
+    inline fun modify(defaultValue: () -> T, block: T.() -> Unit): T {
         return (get() ?: defaultValue()).apply {
             block(this)
             set(this)
@@ -136,5 +142,4 @@ class InstanceAccess<T : Any, L>(
             }
         }
     }
-
 }

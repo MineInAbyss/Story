@@ -4,7 +4,7 @@ class DataSetter<T>(
         private var data: T
 ) {
     private var changed = false
-    internal fun get(): T = data
+    fun _get(): T = data
     fun set(value: T) {
         data = value
         changed = true

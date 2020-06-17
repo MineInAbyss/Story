@@ -71,10 +71,10 @@ interface DataAccessI<T : Any, in L> {
      */
     fun update(locationKey: L, block: DataSetter<T?>.(T?) -> Unit): T? {
         val modified = DataSetter(get(locationKey))
-        block(modified, modified.get())
+        block(modified, modified._get())
         if (modified.hasChanged())
-            set(locationKey, modified.get())
-        return modified.get()
+            set(locationKey, modified._get())
+        return modified._get()
     }
 
     /**
@@ -83,10 +83,10 @@ interface DataAccessI<T : Any, in L> {
      */
     fun update(locationKey: L, defaultValue: () -> T, block: DataSetter<T>.(T) -> Unit): T {
         val modified = DataSetter(get(locationKey) ?: defaultValue())
-        block(modified, modified.get())
+        block(modified, modified._get())
         if (modified.hasChanged())
-            set(locationKey, modified.get())
-        return modified.get()
+            set(locationKey, modified._get())
+        return modified._get()
     }
 
     /**

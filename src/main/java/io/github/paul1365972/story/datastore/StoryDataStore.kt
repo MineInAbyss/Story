@@ -75,10 +75,10 @@ interface StoryDataStore<in L> {
      */
     fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, block: DataSetter<T?>.(T?) -> Unit): T? {
         val modified = DataSetter(get(dataKey, locationKey))
-        block(modified, modified.get())
+        block(modified, modified._get())
         if (modified.hasChanged())
-            set(dataKey, locationKey, modified.get())
-        return modified.get()
+            set(dataKey, locationKey, modified._get())
+        return modified._get()
     }
 
     /**
@@ -87,10 +87,10 @@ interface StoryDataStore<in L> {
      */
     fun <T : Any> update(dataKey: DataKey<T>, locationKey: L, defaultValue: () -> T, block: DataSetter<T>.(T) -> Unit): T {
         val modified = DataSetter(get(dataKey, locationKey) ?: defaultValue())
-        block(modified, modified.get())
+        block(modified, modified._get())
         if (modified.hasChanged())
-            set(dataKey, locationKey, modified.get())
-        return modified.get()
+            set(dataKey, locationKey, modified._get())
+        return modified._get()
     }
 
     /**

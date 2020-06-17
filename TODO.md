@@ -12,6 +12,7 @@
 - [ ] Maybe implement batching
 - [ ] Maybe remove data on entity death to clear caches prematurely etc.
 - [ ] Removing a world won't clean up the worlds data
+- [ ] Make kotlin functions inline (InstanceAccess done)
 
 ### Improvements
 - [x] Adjust cache sizes for all public data stores (2/2)
