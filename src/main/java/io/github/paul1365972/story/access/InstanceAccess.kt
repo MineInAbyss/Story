@@ -40,6 +40,14 @@ class InstanceAccess<T : Any, L>(
     }
 
     /**
+     * @see [get]
+     * Calls block with the deserialized value, if the value is null is does nothing
+     */
+    inline fun <R> ifPresent(block: (T) -> R): R? {
+        return get()?.let(block)
+    }
+
+    /**
      * Computes a new value at the specified location.
      *
      * If you only want to conditionally update the value use [update].
