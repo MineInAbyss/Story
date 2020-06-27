@@ -6,7 +6,7 @@ import java.io.*
 abstract class StreamDataKey<T : Any>(
         plugin: Plugin,
         name: String
-) : DataKey<T>(plugin, name) {
+) : PersistentDataKey<T>(plugin, name) {
 
     @Throws(IOException::class)
     abstract fun serialize(value: T, oos: ObjectOutputStream)
@@ -29,18 +29,4 @@ abstract class StreamDataKey<T : Any>(
             }
         }
     }
-
-    override fun copy(value: T): T = deserialize(serialize(value))
-}
-
-@FunctionalInterface
-interface Serializer<T> {
-    @Throws(IOException::class)
-    fun apply(value: T, oos: ObjectOutputStream)
-}
-
-@FunctionalInterface
-interface Deserializer<T> {
-    @Throws(IOException::class)
-    fun apply(ois: ObjectInputStream): T
 }

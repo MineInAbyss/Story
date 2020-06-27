@@ -1,6 +1,6 @@
 package io.github.paul1365972.story
 
-import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.datastore.DataStore
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Location
@@ -16,30 +16,30 @@ interface StoryService {
     /**
      * The public data store for accessing block level data
      */
-    val defaultBlockStore: StoryDataStore<Location>
+    val defaultBlockStore: DataStore<Location>
 
     /**
      * The public data store for accessing chunk level data
      */
-    val defaultChunkStore: StoryDataStore<Chunk>
+    val defaultChunkStore: DataStore<Chunk>
 
     /**
      * The public data store for accessing world level data
      */
-    val defaultWorldStore: StoryDataStore<World>
+    val defaultWorldStore: DataStore<World>
 
     /**
      * The public data store for accessing tile entity level data
      */
-    val defaultTileEntityStore: StoryDataStore<BlockState>
+    val defaultTileEntityStore: DataStore<BlockState>
 
     /**
      * The public data store for accessing entity level data
      */
-    val defaultEntityStore: StoryDataStore<Entity>
+    val defaultEntityStore: DataStore<Entity>
 
     /**
      * The public data store for accessing item level data
      */
-    val defaultItemStore: StoryDataStore<ItemStack>
+    val defaultItemStore: DataStore<ItemStack>
 }

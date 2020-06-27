@@ -1,7 +1,8 @@
 package io.github.paul1365972.story.datastore.wip
 
-import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.datastore.PersistentDataStore
 import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.PersistentDataKey
 import java.sql.Connection
 
 class MySQLDataStore(
@@ -9,7 +10,7 @@ class MySQLDataStore(
         tableName: String,
         keyColumn: String = "key",
         bytesColumn: String = "bytes"
-) : StoryDataStore<String> {
+) : PersistentDataStore<String> {
 
     //TODO I have no clue how mysql works use with great care
     //TODO This code is untested
@@ -36,7 +37,7 @@ class MySQLDataStore(
         }
     }
 
-    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: String): T? {
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: String): T? {
         selectStatement.setString(1, toKey(dataKey, locationKey))
         val resultset = selectStatement.executeQuery()
         if (resultset.first())
@@ -44,7 +45,7 @@ class MySQLDataStore(
         return null
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: String, value: T?) {
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: String, value: T?) {
         if (value != null) {
             selectStatement.setString(1, toKey(dataKey, locationKey))
             selectStatement.setBytes(2, dataKey.serialize(value))
@@ -62,7 +63,7 @@ class MySQLDataStore(
     }
 
     // TODO
-    fun <T : Any> putBatch(data: Map<Pair<DataKey<T>, String>, T>) {
+    fun <T : Any> putBatch(data: Map<Pair<PersistentDataKey<T>, String>, T>) {
         data.forEach { (k, v) ->
             selectStatement.setString(1, toKey(k.first, k.second))
             selectStatement.setBytes(2, k.first.serialize(v))

@@ -3,16 +3,12 @@ package io.github.paul1365972.story.key
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.Plugin
 
-abstract class DataKey<T : Any>(
+open class DataKey<T : Any>(
         val plugin: Plugin,
         val name: String
 ) {
-    val namespacedKey: NamespacedKey by lazy { NamespacedKey(plugin, name) }
+    val namespacedKey: NamespacedKey = NamespacedKey(plugin, name)
     val namespacedName: String = "${plugin.name}:$name"
-
-    abstract fun serialize(value: T): ByteArray
-    abstract fun deserialize(data: ByteArray): T
-    abstract fun copy(value: T): T
 
     override fun hashCode(): Int = namespacedName.hashCode()
 

@@ -1,11 +1,11 @@
 package io.github.paul1365972.story.datastore.filters
 
-import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.datastore.DataStore
 import io.github.paul1365972.story.key.DataKey
 
 class DebugDataStore<L>(
-        val underlying: StoryDataStore<L>
-) : StoryDataStore<L> {
+        val underlying: DataStore<L>
+) : DataStore<L> {
 
     override fun close() = underlying.close()
     override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {

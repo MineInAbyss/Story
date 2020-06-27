@@ -1,13 +1,12 @@
 package io.github.paul1365972.story.access
 
-import io.github.paul1365972.story.datastore.DataSetter
-import io.github.paul1365972.story.datastore.StoryDataStore
+import io.github.paul1365972.story.datastore.DataStore
 import io.github.paul1365972.story.key.DataKey
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 class InstanceAccess<T : Any, L>(
-        val dataStore: StoryDataStore<L>,
+        val dataStore: DataStore<L>,
         val dataKey: DataKey<T>,
         val locationKey: L
 ) {

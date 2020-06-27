@@ -4,8 +4,8 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
-import io.github.paul1365972.story.datastore.StoryDataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.datastore.PersistentDataStore
+import io.github.paul1365972.story.key.PersistentDataKey
 import java.io.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -18,7 +18,7 @@ class FileChunkedDataStore<L>(
         val chunkCacheSize: Int,
         val transformer: (L) -> String,
         val chunkingFunction: (L) -> String
-) : StoryDataStore<L> {
+) : PersistentDataStore<L> {
 
     init {
         if (!folder.exists() && !folder.mkdirs())
@@ -60,7 +60,7 @@ class FileChunkedDataStore<L>(
                 }
             })
 
-    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)
@@ -74,7 +74,7 @@ class FileChunkedDataStore<L>(
         }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)

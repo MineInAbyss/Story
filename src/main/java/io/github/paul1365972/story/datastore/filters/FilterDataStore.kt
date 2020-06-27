@@ -1,17 +1,17 @@
 package io.github.paul1365972.story.datastore.filters
 
-import io.github.paul1365972.story.datastore.StoryDataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.datastore.PersistentDataStore
+import io.github.paul1365972.story.key.PersistentDataKey
 
 abstract class FilterDataStore<L>(
-        val underlying: StoryDataStore<L>
-) : StoryDataStore<L> {
+        val underlying: PersistentDataStore<L>
+) : PersistentDataStore<L> {
 
-    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         return underlying.get(dataKey, locationKey)
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
         underlying.set(dataKey, locationKey, value)
     }
 

@@ -50,10 +50,14 @@ repositories {
         name 'sonatype'
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven {
+        name 'papermc'
+        url 'https://papermc.io/repo/repository/maven-public/'
+    }
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:$serverVersion"
+    compileOnly "com.destroystokyo.paper:paper-api:$serverVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxserializationVersion"
@@ -69,7 +73,7 @@ dependencies {
     runtimeOnly "org.cache2k:cache2k-core:${cache2kVersion}"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testImplementation "org.spigotmc:spigot-api:$serverVersion"
+    testImplementation "com.destroystokyo.paper:paper:$serverVersion"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
