@@ -1,8 +1,8 @@
 # Story 2
 
-[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
+[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story/story2?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
 
-Basic Paper plugin for attaching custom data to: 
+Basic Paper plugin for managing custom data and attaching it to: 
 - Worlds
 - Chunks
 - Blocks
@@ -10,7 +10,11 @@ Basic Paper plugin for attaching custom data to:
 - Items
 - Entities (and Players)
 
+Supports managing entity groups, for higher performance entity lookups
+
 **Warning:** This plugin is in an early development stage and has been tested exactly **0** times, everything should work, but use with care
+
+Examples are mostly outdated
 
 ## Example
 
