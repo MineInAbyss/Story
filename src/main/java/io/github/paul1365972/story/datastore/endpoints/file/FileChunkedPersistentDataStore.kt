@@ -62,15 +62,13 @@ class FileChunkedPersistentDataStore<L>(
 
     override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         val chunkKey = chunkingFunction(locationKey)
-        val chunk = try {
-            cache.get(chunkKey)
-        } catch (e: ExecutionException) {
-            null
-        }
-        return chunk?.let {
-            it.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
+        return try {
+            val chunk = cache.get(chunkKey)
+            chunk.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
                 dataKey.deserialize(datum)
             }
+        } catch (e: ExecutionException) {
+            null
         }
     }
 
@@ -78,11 +76,9 @@ class FileChunkedPersistentDataStore<L>(
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)
-        } catch (e: ExecutionException) {
-            null
+        } catch (e: Exception) {
+            Chunk<String>(true).also { cache.put(chunkKey, it) }
         }
-                ?: Chunk<String>(true).also { cache.put(chunkKey, it) }
-        chunk.dirty = true
         val key = dataKey.namespacedName to transformer(locationKey)
         if (value != null) {
             chunk.data[key] = dataKey.serialize(value)

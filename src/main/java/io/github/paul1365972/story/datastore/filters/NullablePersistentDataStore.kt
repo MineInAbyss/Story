@@ -7,6 +7,7 @@ class NullablePersistentDataStore<L, K>(
         val underlying: PersistentDataStore<K>,
         val transformer: (L) -> K?
 ) : PersistentDataStore<L> {
+
     override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         return transformer(locationKey)?.let {
             underlying.get(dataKey, it)
@@ -18,6 +19,10 @@ class NullablePersistentDataStore<L, K>(
             underlying.set(dataKey, it, value)
         }
     }
+
+    override fun tick() = underlying.tick()
+
+    override fun flush() = underlying.flush()
 
     override fun close() = underlying.close()
 }

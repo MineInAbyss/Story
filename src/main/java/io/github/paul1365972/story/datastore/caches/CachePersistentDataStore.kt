@@ -50,6 +50,11 @@ class CachePersistentDataStore<L> @JvmOverloads constructor(
         cache.put(dataKey to LocationWrapper(locationKey, cacheKeyMapper), ValueWrapper(value, !writeThrough))
     }
 
+    override fun flush() {
+        cache.invalidateAll()
+        super.flush()
+    }
+
     override fun close() {
         cache.invalidateAll()
         super.close()

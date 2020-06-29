@@ -50,7 +50,7 @@ class Story : JavaPlugin(), StoryService {
     override val defaultWorldStore: PersistentDataStore<World> by registerLazy {
         CachePersistentDataStore<World>(
                 FolderPersistentDataStore(File(dataFolder, "world"), MC::toWorldKey),
-                128, World::getUID, copyFresh = false
+                128 * COMPONENTS, World::getUID, copyFresh = false
         )
     }
 

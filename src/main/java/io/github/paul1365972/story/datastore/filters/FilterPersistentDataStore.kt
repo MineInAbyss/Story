@@ -7,13 +7,14 @@ abstract class FilterPersistentDataStore<L>(
         val underlying: PersistentDataStore<L>
 ) : PersistentDataStore<L> {
 
-    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
-        return underlying.get(dataKey, locationKey)
-    }
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? = underlying.get(dataKey, locationKey)
 
-    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
-        underlying.set(dataKey, locationKey, value)
-    }
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) =
+            underlying.set(dataKey, locationKey, value)
+
+    override fun tick() = underlying.tick()
+
+    override fun flush() = underlying.flush()
 
     override fun close() = underlying.close()
 }

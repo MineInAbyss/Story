@@ -3,4 +3,4 @@ version: @version@
 main: io.github.paul1365972.story.Story
 api-version: 1.15
 authors: [Paul1365972]
-description: Basic Spigot plugin for attaching custom data to Blocks, Chunks, Worlds, Tile Entities, Items, Players and Entities
+description: Basic Paper plugin for managing custom data and attaching it to all minecraft objects
