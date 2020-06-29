@@ -8,7 +8,7 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.util.*
 
-class FolderDataStore<L>(
+class FolderPersistentDataStore<L>(
         val folder: File,
         val transformer: (L) -> String
 ) : PersistentDataStore<L> {

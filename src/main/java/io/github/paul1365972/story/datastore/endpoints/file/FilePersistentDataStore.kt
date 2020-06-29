@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FileDataStore(
+class FilePersistentDataStore(
         val file: File
 ) : PersistentDataStore<String> {
 

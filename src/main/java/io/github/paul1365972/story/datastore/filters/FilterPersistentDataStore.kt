@@ -3,7 +3,7 @@ package io.github.paul1365972.story.datastore.filters
 import io.github.paul1365972.story.datastore.PersistentDataStore
 import io.github.paul1365972.story.key.PersistentDataKey
 
-abstract class FilterDataStore<L>(
+abstract class FilterPersistentDataStore<L>(
         val underlying: PersistentDataStore<L>
 ) : PersistentDataStore<L> {
 

@@ -5,7 +5,7 @@ import io.github.paul1365972.story.key.PersistentDataKey
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
 
-class PDCDataStore : PersistentDataStore<PersistentDataHolder> {
+class PDCPersistentDataStore : PersistentDataStore<PersistentDataHolder> {
 
     override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: PersistentDataHolder): T? {
         return locationKey.persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY]?.let {

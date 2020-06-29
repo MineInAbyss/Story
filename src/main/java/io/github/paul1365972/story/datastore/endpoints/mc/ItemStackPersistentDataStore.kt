@@ -5,7 +5,7 @@ import io.github.paul1365972.story.key.PersistentDataKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
-class ItemStackDataStore : PersistentDataStore<ItemStack> {
+class ItemStackPersistentDataStore : PersistentDataStore<ItemStack> {
 
     override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: ItemStack): T? {
         return locationKey.itemMeta?.run {

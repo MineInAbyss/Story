@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ExposedDBDataStore(
+class ExposedDBPersistentDataStore(
         val database: Database,
         tableName: String,
         keyColumn: String = "key",

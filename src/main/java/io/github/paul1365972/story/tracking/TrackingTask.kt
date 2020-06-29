@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.tracking
 
-class TrackingTask(
-        private val callback: () -> Unit
+class TrackingTask internal constructor(
+        private val id: Long
 ) {
-    fun untrack() = callback()
+    fun cancel() = EntityTracker.removeCallback(id)
 }

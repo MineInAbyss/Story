@@ -4,7 +4,7 @@ import org.bukkit.Chunk
 import org.bukkit.Location
 import org.bukkit.World
 
-object MCDataStoreUtil {
+object MinecraftKeyUtil {
 
     @JvmStatic
     fun normalizeLocation(loc: Location) = Location(loc.world, loc.blockX.toDouble(), loc.blockY.toDouble(), loc.blockZ.toDouble())

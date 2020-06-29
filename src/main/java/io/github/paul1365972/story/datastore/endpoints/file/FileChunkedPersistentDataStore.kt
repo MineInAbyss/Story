@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FileChunkedDataStore<L>(
+class FileChunkedPersistentDataStore<L>(
         val folder: File,
         val chunkCacheSize: Int,
         val transformer: (L) -> String,

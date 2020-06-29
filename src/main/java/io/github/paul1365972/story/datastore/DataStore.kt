@@ -31,7 +31,7 @@ interface DataStore<in L> {
     /**
      * Called once every tick
      */
-    fun onTick() {}
+    fun tick() {}
 
     /**
      * Closes this data store and frees all resources.

@@ -5,18 +5,18 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
 import io.github.paul1365972.story.datastore.PersistentDataStore
-import io.github.paul1365972.story.datastore.filters.FilterDataStore
+import io.github.paul1365972.story.datastore.filters.FilterPersistentDataStore
 import io.github.paul1365972.story.key.DataKey
 import io.github.paul1365972.story.key.PersistentDataKey
 import java.util.concurrent.ExecutionException
 
-class CacheDataStore<L> @JvmOverloads constructor(
+class CachePersistentDataStore<L> @JvmOverloads constructor(
         underlying: PersistentDataStore<L>,
         val cacheSize: Int,
         val cacheKeyMapper: (L) -> Any? = { it },
         val copyFresh: Boolean = true,
         val writeThrough: Boolean = false
-) : FilterDataStore<L>(underlying) {
+) : FilterPersistentDataStore<L>(underlying) {
 
     private val cache: LoadingCache<Pair<PersistentDataKey<*>, LocationWrapper<L>>, ValueWrapper<Any?>> = CacheBuilder.newBuilder()
             .maximumSize(cacheSize.toLong())
@@ -70,8 +70,6 @@ class CacheDataStore<L> @JvmOverloads constructor(
         }
 
         override fun hashCode(): Int = key?.hashCode() ?: 0
-
-        //override fun toString(): String = "LocationWrapper(location=$location, key=$key)"
     }
 
     protected data class ValueWrapper<out T>(
