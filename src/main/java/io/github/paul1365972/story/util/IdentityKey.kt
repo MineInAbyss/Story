@@ -1,4 +1,4 @@
-package io.github.paul1365972.story.datastore.caches
+package io.github.paul1365972.story.util
 
 class IdentityKey<T>(
         val ref: T
@@ -11,5 +11,5 @@ class IdentityKey<T>(
         return System.identityHashCode(ref)
     }
 
-    //override fun toString() = "IdentityKey(ref=$ref)"
+    override fun toString() = "IdentityKey(ref=$ref)"
 }

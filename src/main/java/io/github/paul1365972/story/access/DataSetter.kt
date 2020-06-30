@@ -1,4 +1,4 @@
-package io.github.paul1365972.story.datastore
+package io.github.paul1365972.story.access
 
 class DataSetter<T>(
         private var data: T

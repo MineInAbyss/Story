@@ -4,8 +4,8 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
-import io.github.paul1365972.story.datastore.StoryDataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.datastore.PersistentDataStore
+import io.github.paul1365972.story.key.PersistentDataKey
 import java.io.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -13,12 +13,12 @@ import java.util.concurrent.ExecutionException
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FileChunkedDataStore<L>(
+class FileChunkedPersistentDataStore<L>(
         val folder: File,
         val chunkCacheSize: Int,
         val transformer: (L) -> String,
         val chunkingFunction: (L) -> String
-) : StoryDataStore<L> {
+) : PersistentDataStore<L> {
 
     init {
         if (!folder.exists() && !folder.mkdirs())
@@ -60,29 +60,25 @@ class FileChunkedDataStore<L>(
                 }
             })
 
-    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         val chunkKey = chunkingFunction(locationKey)
-        val chunk = try {
-            cache.get(chunkKey)
-        } catch (e: ExecutionException) {
-            null
-        }
-        return chunk?.let {
-            it.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
+        return try {
+            val chunk = cache.get(chunkKey)
+            chunk.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
                 dataKey.deserialize(datum)
             }
+        } catch (e: ExecutionException) {
+            null
         }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)
-        } catch (e: ExecutionException) {
-            null
+        } catch (e: Exception) {
+            Chunk<String>(true).also { cache.put(chunkKey, it) }
         }
-                ?: Chunk<String>(true).also { cache.put(chunkKey, it) }
-        chunk.dirty = true
         val key = dataKey.namespacedName to transformer(locationKey)
         if (value != null) {
             chunk.data[key] = dataKey.serialize(value)

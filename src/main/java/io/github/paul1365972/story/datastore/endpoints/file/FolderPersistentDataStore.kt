@@ -1,27 +1,28 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.story.datastore.endpoints.MemoryDataStore
+import io.github.paul1365972.story.datastore.PersistentDataStore
 import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.PersistentDataKey
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.util.*
 
-class FolderDataStore<L>(
+class FolderPersistentDataStore<L>(
         val folder: File,
         val transformer: (L) -> String
-) : MemoryDataStore<L>() {
+) : PersistentDataStore<L> {
 
     init {
         if (!folder.exists() && !folder.mkdirs())
             throw FileNotFoundException("Could not find or create data folder '${folder.path}'")
     }
 
-    override fun <T : Any> get(dataKey: DataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
         return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserialize(it) }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
         if (value != null)
             save(toFileName(dataKey, locationKey), dataKey.serialize(value))
         else

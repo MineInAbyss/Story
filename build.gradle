@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 group pluginGroup
@@ -28,10 +28,8 @@ compileTestKotlin {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mvn(MavenPublication) {
             from components.java
-            artifact shadowJar
-
             afterEvaluate {
                 artifactId project.name.toLowerCase()
             }
@@ -43,17 +41,13 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        name 'spigot-repo'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-    maven {
-        name 'sonatype'
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
+        name 'papermc'
+        url 'https://papermc.io/repo/repository/maven-public/'
     }
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:$serverVersion"
+    compileOnly "com.destroystokyo.paper:paper-api:$serverVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxserializationVersion"
@@ -69,7 +63,7 @@ dependencies {
     runtimeOnly "org.cache2k:cache2k-core:${cache2kVersion}"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testImplementation "org.spigotmc:spigot-api:$serverVersion"
+    testImplementation "com.destroystokyo.paper:paper:$serverVersion"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
