@@ -5,7 +5,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.cbor.Cbor
 import org.bukkit.plugin.Plugin
 
-class KsxDataKey<T : Any>(
+open class KsxDataKey<T : Any>(
         plugin: Plugin,
         name: String,
         val copyFunction: (T) -> T,
