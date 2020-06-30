@@ -28,10 +28,8 @@ compileTestKotlin {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mvn(MavenPublication) {
             from components.java
-            artifact shadowJar
-
             afterEvaluate {
                 artifactId project.name.toLowerCase()
             }
