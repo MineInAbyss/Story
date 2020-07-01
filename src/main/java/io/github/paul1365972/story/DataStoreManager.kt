@@ -1,6 +1,6 @@
 package io.github.paul1365972.story
 
-import io.github.paul1365972.story.datastore.PersistentDataStore
+import io.github.paul1365972.story.datastore.DataStore
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -8,9 +8,9 @@ import org.bukkit.event.server.PluginDisableEvent
 
 object DataStoreManager : Listener, Runnable {
 
-    private val dataStores = mutableListOf<PersistentDataStore<*>>()
+    private val dataStores = mutableListOf<DataStore<*>>()
 
-    fun register(dataStore: PersistentDataStore<*>) {
+    fun register(dataStore: DataStore<*>) {
         dataStores += dataStore
     }
 
@@ -29,4 +29,4 @@ object DataStoreManager : Listener, Runnable {
 
 }
 
-fun <T : PersistentDataStore<*>> T.register(): T = apply { DataStoreManager.register(this) }
+fun <T : DataStore<*>> T.register(): T = apply { DataStoreManager.register(this) }

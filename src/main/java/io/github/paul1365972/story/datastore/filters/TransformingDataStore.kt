@@ -1,18 +1,17 @@
 package io.github.paul1365972.story.datastore.filters
 
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.datastore.PersistentDataStore
-import io.github.paul1365972.story.key.PersistentDataKey
+import io.github.paul1365972.story.key.DataKey
 
-class TransformingPersistentDataStore<L, K>(
+class TransformingDataStore<L, K>(
         val underlying: DataStore<K>,
         val transformer: (L) -> K
-) : PersistentDataStore<L> {
+) : DataStore<L> {
 
-    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? =
+    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: L): T? =
             underlying.get(dataKey, transformer(locationKey))
 
-    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) =
+    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: L, value: T?) =
             underlying.set(dataKey, transformer(locationKey), value)
 
     override fun tick() = underlying.tick()

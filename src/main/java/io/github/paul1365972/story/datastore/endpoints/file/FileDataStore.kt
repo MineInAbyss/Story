@@ -1,15 +1,15 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
-import io.github.paul1365972.story.datastore.PersistentDataStore
-import io.github.paul1365972.story.key.PersistentDataKey
+import io.github.paul1365972.story.datastore.DataStore
+import io.github.paul1365972.story.key.DataKey
 import java.io.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FilePersistentDataStore(
+class FileDataStore(
         val file: File
-) : PersistentDataStore<String> {
+) : DataStore<String> {
 
     init {
         DataInputStream(ZipInputStream(FileInputStream(file))).use { dis ->
@@ -25,12 +25,12 @@ class FilePersistentDataStore(
 
     protected val map = ConcurrentHashMap<Pair<String, String>, ByteArray>()
 
-    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: String): T? {
+    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: String): T? {
         @Suppress("UNCHECKED_CAST")
         return map[dataKey.namespacedName to locationKey]?.let { dataKey.deserialize(it) }
     }
 
-    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: String, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: String, value: T?) {
         val key = dataKey.namespacedName to locationKey
         if (value != null)
             map[key] = dataKey.serialize(value)
