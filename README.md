@@ -1,6 +1,6 @@
-# Story 2
+# Story
 
-[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story/story2?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
+[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story/master?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
 
 Basic Paper plugin for managing custom data and attaching it to: 
 - Worlds

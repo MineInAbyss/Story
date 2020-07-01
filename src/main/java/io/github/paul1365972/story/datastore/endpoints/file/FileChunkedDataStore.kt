@@ -4,8 +4,8 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
-import io.github.paul1365972.story.datastore.PersistentDataStore
-import io.github.paul1365972.story.key.PersistentDataKey
+import io.github.paul1365972.story.datastore.DataStore
+import io.github.paul1365972.story.key.DataKey
 import java.io.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -13,12 +13,12 @@ import java.util.concurrent.ExecutionException
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class FileChunkedPersistentDataStore<L>(
+class FileChunkedDataStore<L>(
         val folder: File,
         val chunkCacheSize: Int,
         val transformer: (L) -> String,
         val chunkingFunction: (L) -> String
-) : PersistentDataStore<L> {
+) : DataStore<L> {
 
     init {
         if (!folder.exists() && !folder.mkdirs())
@@ -60,7 +60,7 @@ class FileChunkedPersistentDataStore<L>(
                 }
             })
 
-    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: L): T? {
+    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: L): T? {
         val chunkKey = chunkingFunction(locationKey)
         return try {
             val chunk = cache.get(chunkKey)
@@ -72,7 +72,7 @@ class FileChunkedPersistentDataStore<L>(
         }
     }
 
-    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: L, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: L, value: T?) {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)

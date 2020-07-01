@@ -1,17 +1,19 @@
 package io.github.paul1365972.story.key
 
+import io.github.paul1365972.story.datastore.DataStore
 import kotlinx.serialization.BinaryFormat
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.cbor.Cbor
 import org.bukkit.plugin.Plugin
 
-open class KsxDataKey<T : Any>(
+open class KsxDataKey<T : Any, in L>(
         plugin: Plugin,
         name: String,
+        dataStore: DataStore<L>,
         val copyFunction: (T) -> T,
         val serializer: KSerializer<T>,
         val binaryFormat: BinaryFormat = Cbor.Default
-) : PersistentDataKey<T>(plugin, name) {
+) : DataKey<T, L>(plugin, name, dataStore) {
 
     override fun serialize(value: T): ByteArray {
         return binaryFormat.dump(serializer, value)
@@ -22,15 +24,4 @@ open class KsxDataKey<T : Any>(
     }
 
     override fun copy(value: T): T = copyFunction(value)
-
-    override fun hashCode(): Int = namespacedName.hashCode()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is KsxDataKey<*>) return false
-        if (namespacedName != other.namespacedName) return false
-        return true
-    }
-
-    override fun toString(): String = "DataKey(name='$namespacedName')"
 }

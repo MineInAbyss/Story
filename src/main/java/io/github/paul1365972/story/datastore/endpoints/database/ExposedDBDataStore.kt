@@ -1,18 +1,17 @@
 package io.github.paul1365972.story.datastore.endpoints.database
 
-import io.github.paul1365972.story.datastore.PersistentDataStore
+import io.github.paul1365972.story.datastore.DataStore
 import io.github.paul1365972.story.key.DataKey
-import io.github.paul1365972.story.key.PersistentDataKey
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ExposedDBPersistentDataStore(
+class ExposedDBDataStore(
         val database: Database,
         tableName: String,
         keyColumn: String = "key",
         bytesColumn: String = "bytes"
-) : PersistentDataStore<String> {
+) : DataStore<String> {
 
     private val table = object : Table(tableName) {
         val key = varchar(keyColumn, length = 127)
@@ -27,7 +26,7 @@ class ExposedDBPersistentDataStore(
         }
     }
 
-    override fun <T : Any> get(dataKey: PersistentDataKey<T>, locationKey: String): T? {
+    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: String): T? {
         val key = toKey(dataKey, locationKey)
         return transaction(database) {
             table.select {
@@ -38,7 +37,7 @@ class ExposedDBPersistentDataStore(
         }
     }
 
-    override fun <T : Any> set(dataKey: PersistentDataKey<T>, locationKey: String, value: T?) {
+    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: String, value: T?) {
         val key = toKey(dataKey, locationKey)
         if (value != null) {
             transaction(database) {
@@ -56,7 +55,7 @@ class ExposedDBPersistentDataStore(
         }
     }
 
-    private fun toKey(dataKey: DataKey<*>, locationKey: Any): String {
+    private fun toKey(dataKey: DataKey<*, *>, locationKey: Any): String {
         return "${dataKey.namespacedName}:${locationKey}"
     }
 
