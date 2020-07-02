@@ -1,6 +1,7 @@
 # Story
 
-[![GitHub-CI Workflow Status](https://badgen.net/github/checks/Paul1365972/Story/master?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
+[![GitHub-CI Workflow Status](https://badgen.net/github/checks/MineInAbyss/Story?label=Github%20Build&icon=github&cache=3600)](https://github.com/Paul1365972/Story/actions?query=workflow%3A%22Build%22)
+[![CodeMC-CI Build Status](https://badgen.net/runkit/jenkins-status-vbryjbp7mcuc/ci.codemc.io%2Fjob%2FMineInAbyss%2Fjob%2FStory?label=CodeMC%20Build&icon=https%3A%2F%2Fsvgshare.com%2Fi%2FKEK.svg&cache=3600)](https://ci.codemc.io/job/MineInAyss/job/Story/)
 
 Basic Paper plugin for managing custom data and attaching it to: 
 - Worlds
