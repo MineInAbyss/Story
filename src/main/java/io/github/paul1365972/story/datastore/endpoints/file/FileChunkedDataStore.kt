@@ -5,7 +5,7 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.DataKeyI
 import java.io.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -60,19 +60,17 @@ class FileChunkedDataStore<L>(
                 }
             })
 
-    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: L): T? {
+    override fun get(dataKey: DataKeyI, locationKey: L): ByteArray? {
         val chunkKey = chunkingFunction(locationKey)
         return try {
             val chunk = cache.get(chunkKey)
-            chunk.data[dataKey.namespacedName to transformer(locationKey)]?.let { datum ->
-                dataKey.deserialize(datum)
-            }
+            chunk.data[dataKey.namespacedName to transformer(locationKey)]
         } catch (e: ExecutionException) {
             null
         }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: L, value: T?) {
+    override fun set(dataKey: DataKeyI, locationKey: L, data: ByteArray?) {
         val chunkKey = chunkingFunction(locationKey)
         val chunk = try {
             cache.get(chunkKey)
@@ -80,8 +78,8 @@ class FileChunkedDataStore<L>(
             Chunk<String>(true).also { cache.put(chunkKey, it) }
         }
         val key = dataKey.namespacedName to transformer(locationKey)
-        if (value != null) {
-            chunk.data[key] = dataKey.serialize(value)
+        if (data != null) {
+            chunk.data[key] = data
         } else {
             chunk.data.remove(key)
         }

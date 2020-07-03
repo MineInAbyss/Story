@@ -1,20 +1,14 @@
-package io.github.paul1365972.story.key
+package io.github.paul1365972.story.serializer
 
-import io.github.paul1365972.story.datastore.DataStore
 import kotlinx.serialization.BinaryFormat
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.cbor.Cbor
-import org.bukkit.plugin.Plugin
 
-open class KsxDataKey<T : Any, in L>(
-        plugin: Plugin,
-        name: String,
-        dataStore: DataStore<L>,
-        val copyFunction: (T) -> T,
+class KtSerializer<T : Any>(
+        val copyFunction: T.() -> T,
         val serializer: KSerializer<T>,
         val binaryFormat: BinaryFormat = Cbor.Default
-) : DataKey<T, L>(plugin, name, dataStore) {
-
+) : StorySerializer<T> {
     override fun serialize(value: T): ByteArray {
         return binaryFormat.dump(serializer, value)
     }

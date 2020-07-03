@@ -4,17 +4,18 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalCause
-import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.datastore.filters.FilterDataStore
+import io.github.paul1365972.story.datastore.ObjectDataStore
+import io.github.paul1365972.story.datastore.filters.ObjectFilterDataStore
 import io.github.paul1365972.story.key.DataKeyI
 import java.util.concurrent.ExecutionException
 
-class CacheDataStore<L> @JvmOverloads constructor(
-        underlying: DataStore<L>,
+// TODO
+class ObjectCacheDataStore<in L> @JvmOverloads constructor(
+        underlying: ObjectDataStore<L>,
         val cacheSize: Int,
         val cacheKeyMapper: (L) -> Any? = { it },
         val writeThrough: Boolean = false
-) : FilterDataStore<L>(underlying) {
+) : ObjectFilterDataStore<L>(underlying) {
 
     private val cache: LoadingCache<Pair<DataKeyI, LocationWrapper<L>>, DataWrapper> = CacheBuilder.newBuilder()
             .maximumSize(cacheSize.toLong())

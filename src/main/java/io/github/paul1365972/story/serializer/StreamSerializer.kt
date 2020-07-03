@@ -1,15 +1,8 @@
-package io.github.paul1365972.story.key
+package io.github.paul1365972.story.serializer
 
-import io.github.paul1365972.story.datastore.DataStore
-import org.bukkit.plugin.Plugin
 import java.io.*
 
-abstract class StreamDataKey<T : Any, in L>(
-        plugin: Plugin,
-        name: String,
-        dataStore: DataStore<L>
-) : DataKey<T, L>(plugin, name, dataStore) {
-
+abstract class StreamSerializer<T : Any> : StorySerializer<T> {
     @Throws(IOException::class)
     abstract fun serialize(value: T, oos: ObjectOutputStream)
 

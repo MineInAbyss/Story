@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.DataKeyI
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -17,18 +17,18 @@ class FolderDataStore<L>(
             throw FileNotFoundException("Could not find or create data folder '${folder.path}'")
     }
 
-    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: L): T? {
-        return load(dataKey.namespacedName + ":" + transformer(locationKey))?.let { dataKey.deserialize(it) }
+    override fun get(dataKey: DataKeyI, locationKey: L): ByteArray? {
+        return load(dataKey.namespacedName + ":" + transformer(locationKey))
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: L, value: T?) {
-        if (value != null)
-            save(toFileName(dataKey, locationKey), dataKey.serialize(value))
+    override fun set(dataKey: DataKeyI, locationKey: L, data: ByteArray?) {
+        if (data != null)
+            save(toFileName(dataKey, locationKey), data)
         else
             Files.deleteIfExists(File(folder, toFileName(dataKey, locationKey)).toPath())
     }
 
-    protected fun toFileName(dataKey: DataKey<*, *>, locationKey: L): String {
+    protected fun toFileName(dataKey: DataKeyI, locationKey: L): String {
         val stringKey = dataKey.namespacedName + ":" + transformer(locationKey)
         return Base64.getUrlEncoder().encodeToString(stringKey.toByteArray())
     }

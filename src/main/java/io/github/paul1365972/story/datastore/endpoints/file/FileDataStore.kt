@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.file
 
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.DataKeyI
 import java.io.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.zip.ZipInputStream
@@ -25,15 +25,15 @@ class FileDataStore(
 
     protected val map = ConcurrentHashMap<Pair<String, String>, ByteArray>()
 
-    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: String): T? {
+    override fun get(dataKey: DataKeyI, locationKey: String): ByteArray? {
         @Suppress("UNCHECKED_CAST")
-        return map[dataKey.namespacedName to locationKey]?.let { dataKey.deserialize(it) }
+        return map[dataKey.namespacedName to locationKey]
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: String, value: T?) {
+    override fun set(dataKey: DataKeyI, locationKey: String, data: ByteArray?) {
         val key = dataKey.namespacedName to locationKey
-        if (value != null)
-            map[key] = dataKey.serialize(value)
+        if (data != null)
+            map[key] = data
         else
             map.remove(key)
     }

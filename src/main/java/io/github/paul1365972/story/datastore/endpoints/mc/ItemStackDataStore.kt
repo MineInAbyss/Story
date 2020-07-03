@@ -1,24 +1,22 @@
 package io.github.paul1365972.story.datastore.endpoints.mc
 
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.DataKeyI
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class ItemStackDataStore : DataStore<ItemStack> {
 
-    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: ItemStack): T? {
+    override fun get(dataKey: DataKeyI, locationKey: ItemStack): ByteArray? {
         return locationKey.itemMeta?.run {
             persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY]
-        }?.let {
-            dataKey.deserialize(it)
         }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: ItemStack, value: T?) {
+    override fun set(dataKey: DataKeyI, locationKey: ItemStack, data: ByteArray?) {
         locationKey.itemMeta?.apply {
-            if (value != null)
-                persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY] = dataKey.serialize(value)
+            if (data != null)
+                persistentDataContainer[dataKey.namespacedKey, PersistentDataType.BYTE_ARRAY] = data
             else
                 persistentDataContainer.remove(dataKey.namespacedKey)
             locationKey.itemMeta = this

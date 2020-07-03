@@ -1,7 +1,7 @@
 package io.github.paul1365972.story.datastore.endpoints.database
 
 import io.github.paul1365972.story.datastore.DataStore
-import io.github.paul1365972.story.key.DataKey
+import io.github.paul1365972.story.key.DataKeyI
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,24 +26,24 @@ class ExposedDBDataStore(
         }
     }
 
-    override fun <T : Any> get(dataKey: DataKey<T, *>, locationKey: String): T? {
+    override fun get(dataKey: DataKeyI, locationKey: String): ByteArray? {
         val key = toKey(dataKey, locationKey)
         return transaction(database) {
             table.select {
                 table.key.eq(key)
             }.firstOrNull()?.let {
-                dataKey.deserialize(it[table.bytes].bytes)
+                it[table.bytes].bytes
             }
         }
     }
 
-    override fun <T : Any> set(dataKey: DataKey<T, *>, locationKey: String, value: T?) {
+    override fun set(dataKey: DataKeyI, locationKey: String, data: ByteArray?) {
         val key = toKey(dataKey, locationKey)
-        if (value != null) {
+        if (data != null) {
             transaction(database) {
                 table.replace {
                     it[table.key] = key
-                    it[table.bytes] = ExposedBlob(dataKey.serialize(value))
+                    it[table.bytes] = ExposedBlob(data)
                 }
             }
         } else {
@@ -55,7 +55,7 @@ class ExposedDBDataStore(
         }
     }
 
-    private fun toKey(dataKey: DataKey<*, *>, locationKey: Any): String {
+    private fun toKey(dataKey: DataKeyI, locationKey: Any): String {
         return "${dataKey.namespacedName}:${locationKey}"
     }
 
